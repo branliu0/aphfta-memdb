@@ -1,0 +1,54 @@
+{% extends "memdb/base.html" %}
+{% csrf_token %}
+{% block title %}Register{% endblock %}
+{% block body %}
+
+<form action="/contact/" method="post">
+
+  <div id="section1">
+    {% for field in section1 %}
+    <p>
+      {{ field.errors }}
+      {{ field.label_tag }}: {{ field }}
+    </p>
+    {% endfor %}
+  </div>
+
+  <div id="section2">
+      {% for field in section2 %}
+        <p>
+          {{ field.errors }}
+          {{ field.label_tag }}: {{ field }}
+        </p>
+      {% endfor %}
+  </div>
+
+  <div id="section3">
+      {% for field in section3 %}
+        <p>
+          {{ field.errors }}
+          {{ field.label_tag }}: {{ field }}
+        </p>
+      {% endfor %}
+  </div>
+
+  <div id="section4">
+      {% for field in section4 %}
+        <p>
+          {{ field.errors }}
+          {{ field.label_tag }}: {{ field }}
+        </p>
+      {% endfor %}
+  </div>
+
+  <div id="section5">
+      {% for field in section5 %}
+        <p>
+          {{ field.errors }}
+          {{ field.label_tag }}: {{ field }}
+        </p>
+      {% endfor %}
+      <p><input type="submit" value="Send message" /></p>
+  </div>
+
+{{% endblock %}
