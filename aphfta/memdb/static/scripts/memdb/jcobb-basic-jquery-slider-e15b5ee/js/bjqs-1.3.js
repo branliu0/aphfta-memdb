@@ -413,6 +413,8 @@
 
         var conf_controls = function() {
 
+            // change to buttons
+
             // create the elements for the controls
             $c_wrapper  = $('<ul class="bjqs-controls"></ul>');
             $c_fwd      = $('<li class="bjqs-next"><a href="#" data-direction="'+ vars.fwd +'">' + settings.nexttext + '</a></li>');

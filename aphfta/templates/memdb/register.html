@@ -9,6 +9,7 @@
       <ul class="bjqs">
         <li>
           <div id="section1" >
+            <h1>Basic Information</h1>
             {% for field in section1 %}
               <p>
               {{ field.errors }}
@@ -19,6 +20,7 @@
 
         <li>
           <div class="section2">
+            <h1>Description of Health Facility / Clinic</h1>
             {% for field in section2 %}
               <p>
                 {{ field.errors }}
@@ -30,6 +32,8 @@
 
         <li>
           <div class="section3">
+            <h1>Supportive Services</h1>
+            <h2>Check box if hospital / clinic has working:</h2>
             {% for field in section3 %}
               <p>
                 {{ field.errors }}
@@ -41,6 +45,8 @@
 
         <li>
           <div class="section4">
+            <h1>Staff Establishment</h1>
+            <h2>Enter total number</h2>
             {% for field in section4 %}
               <p>
                 {{ field.errors }}
@@ -52,6 +58,7 @@
 
         <li>
           <div class="section5">
+            <h1>Additional Information</h1>
             {% for field in section5 %}
               <p>
                 {{ field.errors }}
