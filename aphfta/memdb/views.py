@@ -24,7 +24,7 @@ def register(request):
     section4 = form[physicians_pos:average_pos]
     section5 = form[average_pos:]
 
-    return render_to_response('memdb/register.html',
+    return render(request, 'memdb/register.html',
             {'section1': section1,
              'section2': section2,
              'section3': section3,

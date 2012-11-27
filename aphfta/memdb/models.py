@@ -102,5 +102,3 @@ class OtherStaffForm(ModelForm):
 class WardForm(ModelForm):
     class Meta:
         model = Ward
-
-
