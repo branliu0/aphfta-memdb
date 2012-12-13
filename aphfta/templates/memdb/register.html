@@ -8,7 +8,7 @@
     <div id="registration-form">
       <ul class="bjqs">
         <li>
-          <div id="section1" >
+          <div id="section1" class="regFormSection" >
             <h1>Basic Information</h1>
             {% for field in section1 %}
               <p>
@@ -19,7 +19,7 @@
         </li>
 
         <li>
-          <div class="section2">
+          <div id="section2" class="regFormSection" >
             <h1>Description of Health Facility / Clinic</h1>
             {% for field in section2 %}
               <p>
@@ -31,7 +31,7 @@
         </li>
 
         <li>
-          <div class="section3">
+          <div id="section3" class="regFormSection" >
             <h1>Supportive Services</h1>
             <h2>Check box if hospital / clinic has working:</h2>
             {% for field in section3 %}
@@ -44,7 +44,7 @@
         </li>
 
         <li>
-          <div class="section4">
+          <div id="section4" class="regFormSection" >
             <h1>Staff Establishment</h1>
             <h2>Enter total number</h2>
             {% for field in section4 %}
@@ -57,7 +57,7 @@
         </li>
 
         <li>
-          <div class="section5">
+          <div id="section5" class="regFormSection" >
             <h1>Additional Information</h1>
             {% for field in section5 %}
               <p>
@@ -65,7 +65,7 @@
                 {{ field.label_tag }}: {{ field }}
               </p>
             {% endfor %}
-            <input type="submit" value="Send message" /></p>
+            <input type="submit" value="Register" /></p>
           </div>
         </li>
 
@@ -76,6 +76,7 @@
 
 {% block stylesheets %}
   <link rel="stylesheet" href="{{ STATIC_URL }}css/bjqs.css" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/registration.css" />
 {% endblock %}
 
 {% block scripts %}
