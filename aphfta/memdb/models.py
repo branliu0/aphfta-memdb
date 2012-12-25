@@ -22,7 +22,7 @@ class Facility(models.Model):
     doctor_ic = models.CharField('Doctor In Charge', max_length=250)
     qualifications = models.CharField('Qualifications', max_length=500)
     outpatient = models.CharField('Outpatient', max_length=500)
-    inpatient = models.CharField('Impatient', max_length=500)
+    inpatient = models.CharField('Inpatient', max_length=500)
 
     hospital_health_maternity = models.BooleanField('Hospital, Health Centre, Dispensary, Maternity Homes')
 
@@ -77,14 +77,14 @@ class Facility(models.Model):
         return self.facility_name
 
 class OtherStaff(models.Model):
-    staff_type = models.CharField(max_length = 250)
+    staff_type = models.CharField(max_length=250)
     num = models.IntegerField()
     facility = models.ForeignKey(Facility)
     def __unicode__(self):
         return self.staff_type
 
 class Ward(models.Model):
-    ward_type = models.CharField(max_length = 200)
+    ward_type = models.CharField(max_length=200)
     num_beds = models.IntegerField()
     facility = models.ForeignKey(Facility)
     def __unicode__(self):
