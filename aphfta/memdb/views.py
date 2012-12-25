@@ -9,7 +9,6 @@ from memdb.models import FacilityForm, OtherStaffForm, WardForm
 def index(request):
   return render(request, 'memdb/index.html')
 
-
 def home(request):
   return render(request, 'memdb/home.html')
 
@@ -28,15 +27,22 @@ def register(request):
     return render(request, 'memdb/register.html', context)
 
   elif request.method == 'POST':
-    return HttpResponse(request.POST.get('facility_name') + 'testing')
-# 
-# def update(request, id=None):
-#   if request.method == "GET":
-#     facility = Facility.objects.get(pk=1)
-#     form = FacilityForm(facility)
-# 
-#     return render(request, 'memdb/register.html',
-#             {
-#             })
-#   elif request.method == 'POST':
-    
+    form = FacilityForm(request.POST)
+    if form.is_valid():
+        form.save()
+        return http.HttpResponseRedirect('/')
+
+def update(request, id=None):
+  facility = get_object_or_404(Facility, id=id)
+
+  if request.method == "POST":
+    form = FacilityForm(request.POST, instance=facility)
+    if form.is_valid():
+      form.save()
+      return http.HttpResponseRedirect('/')
+
+  elif request.method == "GET":
+    form = FacilityForm(instance = facility)
+
+  context = Context({'title': "Update User", 'form': form})
+  return render(request, 'memdb/register.html', context)
