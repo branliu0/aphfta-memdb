@@ -6,6 +6,7 @@ class FacilityAdmin(admin.ModelAdmin):
   search_fields = ('facility_name', 'tel_office', 'moh_reg_cert')
   date_hierarchy = 'date_joined'
   ordering = ('facility_name',)
+  exclude = ('date_joined',)
 
 admin.site.register(Facility, FacilityAdmin)
 admin.site.register(OtherStaff)
