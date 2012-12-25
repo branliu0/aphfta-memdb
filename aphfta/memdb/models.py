@@ -74,31 +74,39 @@ class Facility(models.Model):
   avg_mch_attendance_month = models.IntegerField('Average MCH Attendance /Month')
 
   def __unicode__(self):
-      return self.facility_name
+    return self.facility_name
+
+  class Meta:
+    verbose_name_plural = 'facilities'
 
 class OtherStaff(models.Model):
   staff_type = models.CharField(max_length=250)
   num = models.IntegerField()
   facility = models.ForeignKey(Facility)
+
   def __unicode__(self):
-      return self.staff_type
+    return self.staff_type
+
+  class Meta:
+    verbose_name_plural = 'other staff'
 
 class Ward(models.Model):
   ward_type = models.CharField(max_length=200)
   num_beds = models.IntegerField()
   facility = models.ForeignKey(Facility)
+
   def __unicode__(self):
-      return self.ward_type
+    return self.ward_type
 
 class FacilityForm(ModelForm):
   class Meta:
-      model = Facility
-      exclude = ('date', 'hospital_health_maternity',)
+    model = Facility
+    exclude = ('date', 'hospital_health_maternity',)
 
 class OtherStaffForm(ModelForm):
   class Meta:
-      model = OtherStaff
+    model = OtherStaff
 
 class WardForm(ModelForm):
   class Meta:
-      model = Ward
+    model = Ward
