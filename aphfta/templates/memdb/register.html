@@ -1,77 +1,40 @@
 {% extends "memdb/base.html" %}
-{% csrf_token %}
 {% block title %}Register{% endblock %}
 
 {% block body %}
 
-  <form action="/members/register" method="post">
+	<h1>Registration Form</h1>
+  <form action="/members/register" method="post" id="registration-form">
     {% csrf_token %}
-    <div id="registration-form">
-      <ul class="bjqs">
-        <li>
-          <div id="section1" class="regFormSection" >
-            <h1>Basic Information</h1>
-            {% for field in section1 %}
-              <p>
-              {{ field.errors }}
-              {{ field.label_tag }}: {{ field }}
-              </p>
-            {% endfor %}
-        </li>
-
-        <li>
-          <div id="section2" class="regFormSection" >
-            <h1>Description of Health Facility / Clinic</h1>
-            {% for field in section2 %}
-              <p>
-                {{ field.errors }}
-                {{ field.label_tag }}: {{ field }}
-              </p>
-            {% endfor %}
-          </div>
-        </li>
-
-        <li>
-          <div id="section3" class="regFormSection" >
-            <h1>Supportive Services</h1>
-            <h2>Check box if hospital / clinic has working:</h2>
-            {% for field in section3 %}
-              <p>
-                {{ field.errors }}
-                {{ field.label_tag }}: {{ field }}
-              </p>
-            {% endfor %}
-          </div>
-        </li>
-
-        <li>
-          <div id="section4" class="regFormSection" >
-            <h1>Staff Establishment</h1>
-            <h2>Enter total number</h2>
-            {% for field in section4 %}
-              <p>
-                {{ field.errors }}
-                {{ field.label_tag }}: {{ field }}
-              </p>
-            {% endfor %}
-          </div>
-        </li>
-
-        <li>
-          <div id="section5" class="regFormSection" >
-            <h1>Additional Information</h1>
-            {% for field in section5 %}
-              <p>
-                {{ field.errors }}
-                {{ field.label_tag }}: {{ field }}
-              </p>
-            {% endfor %}
-            <input type="submit" value="Register" /></p>
-          </div>
-        </li>
-
-      </ul>
-    </div>
+    <fieldset>
+  		{% for field in form %}
+        {% if forloop.counter0 == facility_name_pos %}
+          <legend>Basic Information</legend>
+        {% endif %}
+        
+        {% if forloop.counter0 == outpatient_pos %}
+          <legend>Description of Health Facility / Clinic</legend>
+        {% endif %}
+        
+        {% if forloop.counter0 == lab_pos %}
+          <legend>Supportive Services</legend>
+          <span class="help-block">Check box if hospital / clinic has working:</span>
+        {% endif %}
+        
+        {% if forloop.counter0 == physicians_pos %}
+          <legend>Staff Establishment</legend>
+          <span class="help-block">Enter total number</span>
+        {% endif %}
+        
+        {% if forloop.counter0 == average_pos %}
+          <legend>Additional Information</legend>
+        {% endif %}
+      
+        {{ field.errors }}
+        {{ field.label_tag }}
+        {{ field }}
+      {% endfor %}
+  </fieldset>
   </form>
 {% endblock %}
 

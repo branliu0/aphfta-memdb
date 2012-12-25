@@ -6,7 +6,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
-    # url(r'^$', 'aphfta.views.home', name='home'),
+    url(r'^$', 'memdb.views.home', name='home'),
     # url(r'^aphfta/', include('aphfta.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
