@@ -10,7 +10,6 @@ def index(request):
     return render(request, 'memdb/index.html')
 
 def register(request):
-
     if request.method == "GET":
       facility_name_pos = 0
       outpatient_pos = 10
@@ -35,3 +34,14 @@ def register(request):
               })
     elif request.method == 'POST':
       return HttpResponse(request.POST.get('facility_name') + 'testing')
+
+def update(request, id=None):
+  if request.method == "GET":
+    facility = Facility.objects.get(pk=1)
+    form = FacilityForm(facility)
+
+    return render(request, 'memdb/register.html',
+            {
+            })
+  elif request.method == 'POST':
+
