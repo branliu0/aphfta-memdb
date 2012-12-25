@@ -10,7 +10,7 @@ class Facility(models.Model):
     tel_mobile = models.IntegerField('Tell No. Mobile')
     fax = models.IntegerField('Fax')
     email = models.EmailField('Email')
-    moh_reg_cert = models.IntegerField('Ministry of Health Facility Registration Certificate No.')
+    moh_reg_cert = models.IntegerField('MOH Facility Registration Certificate No.')
     FACILITY_TYPE = (
            ("VO", 'Vountary Agency'),
            ("PR", 'Private'),
