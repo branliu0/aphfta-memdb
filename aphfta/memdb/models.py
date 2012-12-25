@@ -22,7 +22,7 @@ class Facility(models.Model):
     doctor_ic = models.CharField('Doctor In Charge', max_length=250)
     qualifications = models.CharField('Qualifications', max_length=500)
     outpatient = models.CharField('Outpatient', max_length=500)
-    inpatient = models.CharField('Impatient', max_length=500)
+    inpatient = models.CharField('Inpatient', max_length=500)
 
     hospital_health_maternity = models.BooleanField('Hospital, Health Centre, Dispensary, Maternity Homes')
 
