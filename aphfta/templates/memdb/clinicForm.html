@@ -4,7 +4,6 @@
 {% block body %}
 
 	<h1>Registration Form</h1>
-  <a href="/members/upload">Click here to upload via excel</a>
   <form method="post" id="registration-form" class="form-horizontal">
     {% csrf_token %}
   		{% for field in form %}
