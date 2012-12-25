@@ -3,8 +3,8 @@ from django.shortcuts import render, get_object_or_404, render_to_response
 from django.template import Context, loader
 from django.core.urlresolvers import reverse
 
-from memdb.models import Facility, OtherStaff, Ward
-from memdb.models import FacilityForm, OtherStaffForm, WardForm
+from memdb.models import Facility
+from memdb.models import FacilityForm
 
 from django.utils import timezone
 

@@ -22,7 +22,8 @@ class Facility(models.Model):
   doctor_ic = models.CharField('Doctor In Charge', max_length=250)
   qualifications = models.CharField('Qualifications', max_length=500)
   outpatient = models.CharField('Outpatient', max_length=500)
-  inpatient = models.CharField('Impatient', max_length=500)
+  inpatient = models.CharField('Inpatient', max_length=500)
+  wards = models.TextField()
 
   hospital_health_maternity = models.BooleanField('Hospital, Health Centre, Dispensary, Maternity Homes')
 
@@ -67,6 +68,7 @@ class Facility(models.Model):
   rad_technologists = models.IntegerField('Radiographic Technologists')
   rad_technicians = models.IntegerField('Radiographic Technicians')
   rad_assistants = models.IntegerField('Radiographic Assistants')
+  other_staff = models.TextField()
 
   avg_outpatients_daily = models.IntegerField('Average Outpatients Seen /Day')
   avg_inpatients_daily = models.IntegerField('Average Inpatients Seen /Day')
@@ -78,6 +80,9 @@ class Facility(models.Model):
 
   class Meta:
     verbose_name_plural = 'facilities'
+
+'''
+Replaced with text area for now
 
 class OtherStaff(models.Model):
   staff_type = models.CharField(max_length=250)
@@ -95,12 +100,14 @@ class Ward(models.Model):
   facility = models.ForeignKey(Facility)
   def __unicode__(self):
     return self.ward_type
+'''
 
 class FacilityForm(ModelForm):
   class Meta:
     model = Facility
     exclude = ('date_joined', 'hospital_health_maternity',)
 
+'''
 class OtherStaffForm(ModelForm):
   class Meta:
     model = OtherStaff
@@ -108,3 +115,4 @@ class OtherStaffForm(ModelForm):
 class WardForm(ModelForm):
   class Meta:
     model = Ward
+'''
