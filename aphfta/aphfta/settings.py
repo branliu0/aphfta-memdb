@@ -103,7 +103,6 @@ ROOT_URLCONF = 'aphfta.urls'
 WSGI_APPLICATION = 'aphfta.wsgi.application'
 
 TEMPLATE_DIRS = (
-
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -112,12 +111,10 @@ TEMPLATE_DIRS = (
 
 INSTALLED_APPS = (
     'django.contrib.auth',
-    'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-     'django.contrib.admin',
+    'django.contrib.admin',
     'django.contrib.admindocs',
     'memdb',
 )
