@@ -4,7 +4,7 @@
 {% block body %}
 
 	<h1>Registration Form</h1>
-  <form action="/members/register" method="post" id="registration-form">
+  <form method="post" id="registration-form">
     {% csrf_token %}
     <fieldset>
   		{% for field in form %}

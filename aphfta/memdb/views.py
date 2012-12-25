@@ -6,6 +6,8 @@ from django.core.urlresolvers import reverse
 from memdb.models import Facility, OtherStaff, Ward
 from memdb.models import FacilityForm, OtherStaffForm, WardForm
 
+from django.utils import timezone
+
 def index(request):
   return render(request, 'memdb/index.html')
 
@@ -29,8 +31,10 @@ def register(request):
   elif request.method == 'POST':
     form = FacilityForm(request.POST)
     if form.is_valid():
-        form.save()
-        return http.HttpResponseRedirect('/')
+        facility = form.save(commit = False)
+        facility.date = timezone.now()
+        facility.save()
+        return HttpResponseRedirect('/')
 
 def update(request, id=None):
   facility = get_object_or_404(Facility, id=id)
@@ -39,7 +43,7 @@ def update(request, id=None):
     form = FacilityForm(request.POST, instance=facility)
     if form.is_valid():
       form.save()
-      return http.HttpResponseRedirect('/')
+      return HttpResponseRedirect('/')
 
   elif request.method == "GET":
     form = FacilityForm(instance = facility)
