@@ -15,20 +15,24 @@ def run():
   facilities = []
   csvfile = open("aphfta_facilites.csv", "rU")
   reader = csv.reader(csvfile)
+  
+  pk = 100
+  
   for row in reader:
     fields = {}
+    fields["date_joined"] = "2012-01-20"
     
-    fields["name"] = row[0]
-    fields["owner"] = row[1]
+    fields["facility_name"] = row[0]
+    fields["doctor_ic"] = row[1]
     
     phone = row[2].replace(" ", "")
     phone = row[2].replace("/", ",")
     phone = phone.split(",")
     for i in range(len(phone)):
       if i == 0:
-        fields["phone"] = phone[i]
+        fields["tel_office"] = phone[i]
       else:
-        fields["phone{0}".format(i+1)] = phone[i]
+        fields["tel_office{0}".format(i+1)] = phone[i]
     
     email = row[3].replace(" ", "")
     email = email.split(",")
@@ -40,12 +44,13 @@ def run():
     
     fields["region"] = row[4]
     fields["district"] = row[5]
-    fields["type"] = row[6]
+    fields["membership_type"] = row[6]
     
     membership = row[7].lower()
     fields["membership"] = (membership != "no")
     
-    facilities.append({"model": "memdb.facility", "fields": fields})
+    facilities.append({"pk": pk, "model": "memdb.facility", "fields": fields})
+    pk += 1
   
   outfile = open("2012_aphfta_facilities_final.json", "w")
   outfile.write(json.dumps(facilities))
