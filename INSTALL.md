@@ -13,5 +13,5 @@ python manage.py syncdb
 Finally, you can seed your database by loading data from fixtures:
 
 ```bash
-python manage.py loaddata fixtures/facilities.json
+python manage.py loaddata fixtures/*
 ```
