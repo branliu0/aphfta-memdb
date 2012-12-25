@@ -77,14 +77,14 @@ class Facility(models.Model):
         return self.facility_name
 
 class OtherStaff(models.Model):
-    staff_type = models.CharField(max_length = 250)
+    staff_type = models.CharField(max_length=250)
     num = models.IntegerField()
     facility = models.ForeignKey(Facility)
     def __unicode__(self):
         return self.staff_type
 
 class Ward(models.Model):
-    ward_type = models.CharField(max_length = 200)
+    ward_type = models.CharField(max_length=200)
     num_beds = models.IntegerField()
     facility = models.ForeignKey(Facility)
     def __unicode__(self):
