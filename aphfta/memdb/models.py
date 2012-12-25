@@ -3,8 +3,8 @@ from django.forms import ModelForm
 
 # Create your models here.
 class Facility(models.Model):
-  date = models.DateTimeField('Date Joined')
   facility_name = models.CharField('Facility Name', max_length=200)
+  date_joined = models.DateField('Date Joined', auto_now_add=True)
   address = models.CharField('Address', max_length=250)
   tel_office = models.IntegerField('Tel No. Office')
   tel_mobile = models.IntegerField('Tell No. Mobile')
@@ -101,7 +101,7 @@ class Ward(models.Model):
 class FacilityForm(ModelForm):
   class Meta:
     model = Facility
-    exclude = ('date', 'hospital_health_maternity',)
+    exclude = ('date_joined', 'hospital_health_maternity',)
 
 class OtherStaffForm(ModelForm):
   class Meta:
