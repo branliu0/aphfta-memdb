@@ -32,7 +32,7 @@ def register(request):
     form = FacilityForm(request.POST)
     if form.is_valid():
         facility = form.save(commit = False)
-        facility.date = timezone.now()
+        facility.date_joined = timezone.now()
         facility.save()
         return HttpResponseRedirect('/')
 
