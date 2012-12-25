@@ -6,8 +6,12 @@ First set up MySQL. Make sure you have a user with access to a database for the 
 
 Then load the schema:
 
-  python manage.py syncdb
+```bash
+python manage.py syncdb
+```
 
 Finally, you can seed your database by loading data from fixtures:
 
-  python manage.py loaddata fixtures/facilities.json
+```bash
+python manage.py loaddata fixtures/facilities.json
+```
