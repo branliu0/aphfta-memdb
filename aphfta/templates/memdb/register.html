@@ -4,37 +4,39 @@
 {% block body %}
 
 	<h1>Registration Form</h1>
-  <form action="/members/register" method="post" id="registration-form">
+  <form action="/members/register" method="post" id="registration-form" class="form-horizontal">
     {% csrf_token %}
-    <fieldset>
   		{% for field in form %}
-        {% if forloop.counter0 == facility_name_pos %}
-          <legend>Basic Information</legend>
-        {% endif %}
+          {% if forloop.counter0 == facility_name_pos %}
+            <legend>Basic Information</legend>
+          {% endif %}
         
-        {% if forloop.counter0 == outpatient_pos %}
-          <legend>Description of Health Facility / Clinic</legend>
-        {% endif %}
+          {% if forloop.counter0 == outpatient_pos %}
+            <legend>Description of Health Facility / Clinic</legend>
+          {% endif %}
         
-        {% if forloop.counter0 == lab_pos %}
-          <legend>Supportive Services</legend>
-          <span class="help-block">Check box if hospital / clinic has working:</span>
-        {% endif %}
+          {% if forloop.counter0 == lab_pos %}
+            <legend>Supportive Services</legend>
+            <p class="legend-help">Check box if hospital / clinic has working:</p>
+          {% endif %}
         
-        {% if forloop.counter0 == physicians_pos %}
-          <legend>Staff Establishment</legend>
-          <span class="help-block">Enter total number</span>
-        {% endif %}
+          {% if forloop.counter0 == physicians_pos %}
+            <legend>Staff Establishment</legend>
+            <p class="legend-help">Enter total number</p>
+          {% endif %}
         
-        {% if forloop.counter0 == average_pos %}
-          <legend>Additional Information</legend>
-        {% endif %}
-      
-        {{ field.errors }}
-        {{ field.label_tag }}
-        {{ field }}
+          {% if forloop.counter0 == average_pos %}
+            <legend>Additional Information</legend>
+          {% endif %}
+          
+          <div class="control-group">
+              {{ field.errors }}
+              <label class="control-label" for="{{'id_'|add:field.name}}">{{field.label}}</label>
+              <div class="controls">
+                {{field}}
+              </div>
+          </div>
       {% endfor %}
-    </fieldset>
     <button type="submit" class="btn">Register</button>
   </form>
 {% endblock %}
