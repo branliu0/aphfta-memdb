@@ -1,8 +1,11 @@
 from django.conf.urls import patterns, include, url
 
+import report_builder
+
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
+
 
 urlpatterns = patterns('',
     # Examples:
@@ -12,4 +15,5 @@ urlpatterns = patterns('',
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^members/', include('memdb.urls', namespace="memdb")),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^report_builder/', include('report_builder.urls')),
 )
