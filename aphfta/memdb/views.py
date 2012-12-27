@@ -4,7 +4,7 @@ from django.template import Context, loader
 from django.core.urlresolvers import reverse
 
 from memdb.models import Facility
-from memdb.models import FacilityForm
+from memdb.forms import FacilityForm
 
 from django.utils import timezone
 
@@ -20,9 +20,9 @@ def register(request):
   if request.method == "GET":
     facility_name_pos = 0
     outpatient_pos = 10
-    lab_pos = 17
-    physicians_pos = 26
-    average_pos = 46
+    lab_pos = 18
+    physicians_pos = 27
+    average_pos = 48
     submitText = "Register"
 
     form = list(FacilityForm())
@@ -47,7 +47,7 @@ def update(request, id=None):
       return HttpResponseRedirect('/')
 
   elif request.method == "GET":
-    form = FacilityForm(instance = facility)
+    form = FacilityForm(instance=facility)
 
   context = Context({'title': "Update User", 'submitText': "Update", 'form': form})
   return render(request, 'memdb/clinicForm.html', context)
