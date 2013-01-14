@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.template.defaultfilters import slugify, truncatechars
+from django.template.defaultfilters import slugify
 from models import Facility
 
 # A base class that defines some shared functionality.
@@ -36,7 +36,10 @@ def makeSelectFilter(field):
                 if value:
                     # We need to truncate the values so that the select box doesn't
                     # get too long and overflow out of the DIV
-                    lookups.append((value, truncatechars(value, 18)))
+                    # Also, Django 1.3 doesn't have the truncatechars filter, so
+                    # I'm rewriting it here...
+                    truncated = value if len(value) <= 18 else value[0:14] + "..."
+                    lookups.append((value, truncated))
             return sorted(lookups)
     return SelectFilter
 
