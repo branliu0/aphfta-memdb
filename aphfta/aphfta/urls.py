@@ -13,5 +13,5 @@ urlpatterns = patterns('',
     # url(r'^members/', include('memdb.urls', namespace="memdb")),
     # url(r'^admin/', include(admin.site.urls)),
     url(r'', include(admin.site.urls)),
-    url(r'^report_builder/', include('report_builder.urls')),
+    url(r'^reports/', include('report_builder.urls')),
 )
