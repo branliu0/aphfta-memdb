@@ -1,0 +1,21 @@
+{% load i18n %}
+<h3>{% blocktrans with filter_title=title %} By {{ filter_title }} {% endblocktrans %}</h3>
+<select id="select_filter_{{ filter_title|slugify }}" style="margin-left: 10px;">
+{% for choice in choices %}
+  <option{% if choice.selected %} selected="selected"{% endif %} data-href="{{ choice.query_string|iriencode }}">
+    {{ choice.display }}
+  </option>
+{% endfor %}
+</select>
+
+<script type="text/javascript">
+  // Automatically navigate to the new query URL on select
+  (function($) {
+    $(function() {
+      $("select#select_filter_{{ filter_title|slugify }}").change(function(e) {
+        window.location = window.location.pathname +
+            $(this).find("option:selected").attr("data-href");
+      });
+    });
+   })(django.jQuery);
+</script>
