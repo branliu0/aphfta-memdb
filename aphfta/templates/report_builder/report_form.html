@@ -16,41 +16,26 @@
 
 {% block report_form %}
 
-<a class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" href="{% url 'admin:report_builder_report_changelist' %}" title="Back to reports admin">
-  <span class="ui-button-icon-primary ui-icon ui-icon-arrowthick-1-w"></span>
-  <span class="ui-button-text">Back to Reports</span>
-</a>
 
 <div id="container">
   <form action="" method="post">{% csrf_token %}
     <header>
-      <div id="report_id" data-id="{{ object.id }}">
-      Report Builder: {{ form.name }}
-      Last updated: {{ object.modified }}
-      Model: {{ object.root_model }}
+      <a class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" href="{% url 'admin:report_builder_report_changelist' %}" title="Back to reports admin" style="top:4px;left:12px">
+        <span class="ui-button-icon-primary ui-icon ui-icon-arrowthick-1-w"></span>
+        <span class="ui-button-text" style="padding:.2em 1em .2em 2.1em">Back to Reports</span>
+      </a>
       <span style="float: right; padding-right: 5%;">
         <input type="submit" value="Save" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"/>
       </span>
     </header>
     <section class="sidebar">
-      <section class="top_half">
-        Expand Related Fields:
-        <ol class="tree" style="padding-left: 0px; margin: 0px;">
-          <li class="tree_expanded">
-            <span class="button" onclick="show_fields(event, '{{ object.root_model_id }}', '', '');">
-              {{ object.root_model }}
-            </span>
-          </li>
-          <li>{% include "report_builder/report_form_related_li.html" %}</li>
-        </ol>
-      </section>
-      <section class="bottom_half">
+      <section style="overflow:auto; height:100%;">
         Fields:
         <div id="field_selection_div">
           {% include "report_builder/report_form_fields_li.html" %}
         </div>
       </section>
- 
+
     </section>
     <section class="main_area">
       <div id="tabs">
