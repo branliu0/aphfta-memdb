@@ -1,13 +1,13 @@
 {% extends "admin/change_form.html" %}
 
 {# This code is copied from /Library/Python/2.7/site-packages/report_builder/templates/admin/report_builder/change_form.html #}
-{# Basically just adding some javascript to automatically select 'facility' as the root model #}
 {# Unfortunately, I'm not sure if there's a better way to override either the models.py or admin.py from the Python package in this Django app #}
 
 {% block submit_buttons_bottom %}
  {{ block.super }}
  <script>
 (function($) {
+  $(function() {
     $('<input type="submit" name="_easy" value="Save and continue to easy edit"/>').appendTo('.submit-row');
 
     $('<li><input type="submit" class="grp-button grp-default" name="_easy" value="Save and continue to easy edit"/></li>').appendTo('footer ul');
@@ -24,6 +24,14 @@
       }
     }
 
+    // Also remove some unused UI elements
+    // Hide the input for the root model, since this should be taken care of by the above javascript
+    $("div.field-root_model").hide();
+    // Hide the distinct input, since it probably won't get used
+    $("div.field-distinct").hide();
+    // Hide the display field and filter field inline forms, since they'll be set in the easy edit interface
+    $("div#displayfield_set-group, div#filterfield_set-group").hide();
+  });
 })(django.jQuery);
 </script>
 {% endblock %}
