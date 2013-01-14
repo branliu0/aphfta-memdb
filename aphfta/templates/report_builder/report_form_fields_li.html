@@ -1,0 +1,24 @@
+<input type="text" id="search" placeholder="Type to search">
+{% for field in fields %}
+    <li class="draggable rows" style="list-style: none">
+        <span class="button"
+              data-name="{{ field.name }}"
+              data-path="{{ path }}"
+              data-path_verbose="{{ path_verbose }}"
+              >
+            {{ field.verbose_name }}
+        </span>
+    </li>
+{% endfor %}
+
+<script>
+    var $rows = $('.rows');
+    $('#search').keyup(function() {
+        var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+    $rows.show().filter(function() {
+            var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+            return !~text.indexOf(val);
+        }).hide();
+    });
+</script>
