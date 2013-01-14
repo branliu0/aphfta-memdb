@@ -3,7 +3,9 @@ function expand_related(event, model, field, path, path_verbose) {
     var element = $(event.target);
     if ( $(element).hasClass('tree_closed') ){
         $.get(  
-            "/report_builder/ajax_get_related/",  
+              // Fix the URL for our app. FIXME: Make this less brittle!!
+            // "/report_builder/ajax_get_related/",  
+            "/reports/ajax_get_related/",  
             {model: model, field: field, path: path, path_verbose: path_verbose},
             function(data){
                 $(element).addClass('tree_expanded');
@@ -22,7 +24,8 @@ function show_fields(event, model, field, path, path_verbose){
     $('.highlight').removeClass('highlight');
     $(event.target).addClass('highlight');
     $.get(  
-        "/report_builder/ajax_get_fields/",  
+        // "/report_builder/ajax_get_fields/",  
+        "/reports/ajax_get_fields/",  
         {model: model, field: field, path: path, path_verbose: path_verbose},
         function(data){
             $('#field_selection_div').html(data);
@@ -156,7 +159,8 @@ function set_check_value(event) {
 
 function refresh_preview() {
     $.post(  
-        "/report_builder/ajax_preview/",  
+        // "/report_builder/ajax_preview/",  
+        "/reports/ajax_preview/",  
         {
             csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
             report_id: $('#report_id').data('id'),
