@@ -8,12 +8,10 @@ admin.autodiscover()
 
 
 urlpatterns = patterns('',
-    # Examples:
-    url(r'^$', 'memdb.views.home', name='home'),
-    # url(r'^aphfta/', include('aphfta.foo.urls')),
+    # url(r'^$', 'memdb.views.home', name='home'),
 
-    # Uncomment the admin/doc line below to enable admin documentation:
-    url(r'^members/', include('memdb.urls', namespace="memdb")),
-    url(r'^admin/', include(admin.site.urls)),
+    # url(r'^members/', include('memdb.urls', namespace="memdb")),
+    # url(r'^admin/', include(admin.site.urls)),
+    url(r'', include(admin.site.urls)),
     url(r'^report_builder/', include('report_builder.urls')),
 )
