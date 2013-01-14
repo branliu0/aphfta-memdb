@@ -149,3 +149,7 @@ LOGGING = {
         },
     }
 }
+
+# Custom settings below
+
+REPORT_BUILDER_INCLUDE = ['facility']
