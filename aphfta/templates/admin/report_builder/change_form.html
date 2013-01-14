@@ -1,0 +1,29 @@
+{% extends "admin/change_form.html" %}
+
+{# This code is copied from /Library/Python/2.7/site-packages/report_builder/templates/admin/report_builder/change_form.html #}
+{# Basically just adding some javascript to automatically select 'facility' as the root model #}
+{# Unfortunately, I'm not sure if there's a better way to override either the models.py or admin.py from the Python package in this Django app #}
+
+{% block submit_buttons_bottom %}
+ {{ block.super }}
+ <script>
+(function($) {
+    $('<input type="submit" name="_easy" value="Save and continue to easy edit"/>').appendTo('.submit-row');
+
+    $('<li><input type="submit" class="grp-button grp-default" name="_easy" value="Save and continue to easy edit"/></li>').appendTo('footer ul');
+
+    // This code is added to automatically select facility as the root model
+    // Only change the selector if nothing has already been selected. I.e., don't automatically
+    // change the select if we are editing an existing report that for some reason has a different root model.
+    if (!$("select#id_root_model option:selected").val()) {
+      var facility_option = $("select#id_root_model option").filter(function(i, option) {
+        return $(option).text() === "facility";
+      });
+      if (facility_option) {
+        facility_option.attr("selected", "selected");
+      }
+    }
+
+})(django.jQuery);
+</script>
+{% endblock %}
