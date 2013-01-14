@@ -16,14 +16,17 @@
 
 {% block report_form %}
 
-
 <div id="container">
   <form action="" method="post">{% csrf_token %}
     <header>
-      <a class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" href="{% url 'admin:report_builder_report_changelist' %}" title="Back to reports admin" style="top:4px;left:12px">
+      <div id="report_id" data-id="{{ object.id }}" >
+      <a class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" href="{% url 'admin:report_builder_report_changelist' %}" title="Back to reports admin" style="top:4px;left:12px;">
         <span class="ui-button-icon-primary ui-icon ui-icon-arrowthick-1-w"></span>
         <span class="ui-button-text" style="padding:.2em 1em .2em 2.1em">Back to Reports</span>
       </a>
+      <span style="position:absolute;left:42%;top:9px;font-size:20px">
+        Report Name: {{ form.name }}
+      </span>
       <span style="float: right; padding-right: 5%;">
         <input type="submit" value="Save" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"/>
       </span>
