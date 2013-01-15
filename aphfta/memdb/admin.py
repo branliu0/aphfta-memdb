@@ -22,4 +22,11 @@ class FacilityAdmin(admin.ModelAdmin):
   )
   ordering = ('facility_name',)
 
+  class Media:
+    css = {
+      'all': ('css/chosen.css',)
+    }
+    js = ('scripts/jquery-1.8.3.min.js',
+          'scripts/chosen.jquery.min.js')
+
 admin.site.register(Facility, FacilityAdmin)
