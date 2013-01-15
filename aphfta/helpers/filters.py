@@ -39,7 +39,7 @@ def makeSelectFilter(field):
           # I'm rewriting it here...
           truncated = value if len(value) <= 18 else value[0:14] + "..."
           lookups.append((value, truncated))
-          return sorted(lookups)
+      return sorted(lookups)
   return SelectFilter
 
 # Quite similar to the above select filter, except this is for boolean values.
