@@ -12,7 +12,7 @@
   // Automatically navigate to the new query URL on select
   (function($) {
     $(function() {
-      $("select#select_filter_{{ filter_title|slugify }}").change(function(e) {
+      $("select#select_filter_{{ title|slugify }}").change(function(e) {
         window.location = window.location.pathname +
             $(this).find("option:selected").attr("data-href");
       });
