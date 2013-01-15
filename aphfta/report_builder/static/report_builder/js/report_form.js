@@ -90,25 +90,31 @@ function enable_drag() {
             row_html += '<input name="fil-'+i+'-field_verbose" value="'+ field +'" readonly="readonly" maxlength="2000" type="text" id="id_fil-'+i+'-field_verbose">'
             row_html += '<input type="hidden" value="'+ path +'" name="fil-'+i+'-path" id="id_fil-'+i+'-path"></td>'
             row_html += '<td><select onchange="check_filter_type(event.target)" name="fil-'+i+'-filter_type" id="id_fil-'+i+'-filter_type">'
+            // row_html += '<option value="">---------</option>\
+// <option value="exact">Equals</option>\
+// <option value="iexact">Equals (case-insensitive)</option>\
+// <option value="contains">Contains</option>\
+// <option value="icontains" selected="selected">Contains (case-insensitive)</option>\
+// <option value="in">in (must be array like [1,2,3])</option>\
+// <option value="gt">Greater than</option>\
+// <option value="gte">Greater than equals</option>\
+// <option value="lt">Less than</option>\
+// <option value="lte">Less than equals</option>\
+// <option value="startswith">Starts with</option>\
+// <option value="istartswith">Starts with (case-insensitive)</option>\
+// <option value="endswith">Ends with</option>\
+// <option value="iendswith">Ends with  (case-insensitive)</option>\
+// <option value="range">range</option>\
+// <option value="week_day">Week day</option>\
+// <option value="isnull">Is null</option>\
+// <option value="regex">Regular Expression</option>\
+// <option value="iregex">Regular Expression (case-insensitive)</option>\
             row_html += '<option value="">---------</option>\
-<option value="exact">Equals</option>\
-<option value="iexact">Equals (case-insensitive)</option>\
-<option value="contains">Contains</option>\
-<option value="icontains" selected="selected">Contains (case-insensitive)</option>\
-<option value="in">in (must be array like [1,2,3])</option>\
+<option value="iexact">Equals</option>\
+<option value="icontains" selected="selected">Contains</option>\
 <option value="gt">Greater than</option>\
-<option value="gte">Greater than equals</option>\
 <option value="lt">Less than</option>\
-<option value="lte">Less than equals</option>\
-<option value="startswith">Starts with</option>\
-<option value="istartswith">Starts with (case-insensitive)</option>\
-<option value="endswith">Ends with</option>\
-<option value="iendswith">Ends with  (case-insensitive)</option>\
 <option value="range">range</option>\
-<option value="week_day">Week day</option>\
-<option value="isnull">Is null</option>\
-<option value="regex">Regular Expression</option>\
-<option value="iregex">Regular Expression (case-insensitive)</option>\
 </select></td>'
             if ( field.indexOf("DateField") > 0 ) {
             	row_html += '<td><input class="datepicker" id="id_fil-'+i+'-filter_value" type="text" name="fil-'+i+'-filter_value" value="" maxlength="2000"></td>'
