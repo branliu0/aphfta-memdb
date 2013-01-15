@@ -51,3 +51,12 @@ def update(request, id=None):
 
   context = Context({'title': "Update User", 'submitText': "Update", 'form': form})
   return render(request, 'memdb/clinicForm.html', context)
+
+def payment(request, id=None):
+    facility = get_object_or_404(Facility, id=id)
+    name = facility.facility_name
+    balance = facility.balance
+    email = facility.email
+
+    context = Context({'facility': name, "balance": balance, "zone": email})
+    return render(request, 'memdb/payment.html', context)

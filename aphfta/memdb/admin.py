@@ -24,8 +24,8 @@ class FacilityAdmin(admin.ModelAdmin):
 
   def edit_balance(self, obj):
     if obj.balance == 0:
-        return '<a class="paid balance" href="http://www.yahoo.com">Paid</a>'
-    return '<a class="balance" href="http://www.google.com">%s</a>' % obj.balance
+        return '<a class="paid balance" data-id="{0}" href="#">Paid</a>'.format(obj.id)
+    return '<a class="balance" data-id="{0}" href="#">{1}</a>'.format(obj.id, obj.balance)
   edit_balance.allow_tags = True
 
 
