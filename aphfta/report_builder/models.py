@@ -2,6 +2,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
 from django.utils.safestring import mark_safe
 from django.db import models
+from helpers import model_helpers
 
 class Report(models.Model):
     """ A saved report with queryset and descriptive fields
@@ -13,20 +14,21 @@ class Report(models.Model):
         if getattr(settings, 'REPORT_BUILDER_EXCLUDE', False):
             models = models.exclude(name__in=settings.REPORT_BUILDER_EXCLUDE)
         return models
-    
+
     name = models.CharField(max_length=255)
     root_model = models.ForeignKey(ContentType, limit_choices_to={'pk__in':_get_allowed_models})
     created = models.DateField(auto_now_add=True)
     modified = models.DateField(auto_now=True)
     distinct = models.BooleanField()
-    
-    
-    
+
     @models.permalink
     def get_absolute_url(self):
         return ("report_update_view", [str(self.id)])
-    
-    
+
+    class Meta:
+        app_label = model_helpers.string_with_title("report_builder", "Reports")
+        verbose_name = u'Report'
+
 class DisplayField(models.Model):
     """ A display field to show in a report. Always belongs to a Report
     """
@@ -54,7 +56,7 @@ class DisplayField(models.Model):
         ordering = ['position']
     def __unicode__(self):
         return self.name
-        
+
 class FilterField(models.Model):
     """ A display field to show in a report. Always belongs to a Report
     """
@@ -96,4 +98,4 @@ class FilterField(models.Model):
         ordering = ['position']
     def __unicode__(self):
         return self.field
-    
+

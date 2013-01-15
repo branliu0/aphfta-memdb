@@ -1,4 +1,5 @@
 from django.db import models
+from helpers import model_helpers
 
 # Create your models here.
 class Facility(models.Model):
@@ -86,6 +87,8 @@ class Facility(models.Model):
     return self.facility_name
 
   class Meta:
+    app_label = model_helpers.string_with_title("memdb", "Facility Information")
+#    verbose_name = u'Facility'
     verbose_name_plural = 'facilities'
 
 '''
