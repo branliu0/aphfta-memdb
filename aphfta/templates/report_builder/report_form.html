@@ -57,12 +57,12 @@
               <thead>
                 <tr>
                   <th></th>
-                  <th>Path</th>
+                  <th style="display: none">Path</th>
                   <th>Field</th>
                   <th>Name</th>
-                  <th>Sort<span style="padding-left: 1.2em;">Desc?</span></th>
-                  <th>Width</th>
-                  <th>Aggregate</th>
+                  <th style="display: none">Sort<span style="padding-left: 1.2em;">Desc?</span></th>
+                  <th style="display: none">Width</th>
+                  <th style="display: none">Aggregate</th>
                   <th>Delete?</th>
                 </tr>
               </thead>
@@ -70,14 +70,14 @@
                 {% for form in field_list_formset %}
                   <tr>
                     <td><span style="cursor: move;" class="ui-icon ui-icon-arrowthick-2-n-s"></span></td>
-                    <td>
+                    <td style="display: none">
                       {{ form.id }}{{ form.path_verbose }}
                     </td>
                     <td>{{ form.field }}{{ form.field_verbose }}{{ form.path }}</td>
                     <td>{{ form.name }}</td>
-                    <td>{{ form.sort }}{{ form.sort_reverse }}</td>
-                    <td>{{ form.width }}</td>
-                    <td onclick="aggregate_tip()">{{ form.aggregate }}</td>
+                    <td style="display: none">{{ form.sort }}{{ form.sort_reverse }}</td>
+                    <td style="display: none">{{ form.width }}</td>
+                    <td onclick="aggregate_tip()" style="display: none">{{ form.aggregate }}</td>
                     <td>{{ form.DELETE }}<span class="hide_me">{{ form.position }}</span></td>
                   </tr>
                 {% endfor %}
@@ -97,7 +97,7 @@
               <thead>
                 <tr>
                   <th></th>
-                  <th>Path</th>
+                  <th style="display: none">Path</th>
                   <th>Field</th>
                   <th>Filter Type</th>
                   <th>Value</th>
@@ -112,7 +112,7 @@
                     <td>
                       {{ form.id }}{{ form.path_verbose }}
                     </td>
-                    <td>{{ form.field }}{{ form.field_verbose }}{{ form.path }}</td>
+                    <td style="display: none">{{ form.field }}{{ form.field_verbose }}{{ form.path }}</td>
                     <td>{{ form.filter_type }}</td>
                     {% if "DateField" in form.field_verbose.value %}
                         <td class="datepicker">{{ form.filter_value }}</td>
