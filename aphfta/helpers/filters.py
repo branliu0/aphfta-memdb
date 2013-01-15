@@ -30,8 +30,8 @@ def makeSelectFilter(field):
 
     def lookups(self, request, model_admin):
       lookups = []
-      for d in model_admin.model.objects.values(self.field_name).distinct():
-        value = d[self.field_name]
+      for v in model_admin.model.objects.values_list(self.field_name).distinct():
+        value = v[0]
         if value:
           # We need to truncate the values so that the select box doesn't
           # get too long and overflow out of the DIV
