@@ -83,6 +83,21 @@ class Facility(models.Model):
   avg_deliveries_month = models.IntegerField('Average Deliveries /Month', blank=True, null=True)
   avg_mch_attendance_month = models.IntegerField('Average MCH Attendance /Month', blank=True, null=True)
 
+  def full_contact(self):
+    contacts = [
+      "(o) " + self.tel_office,
+      "(o) " + self.tel_office2,
+      "(o) " + self.tel_office3,
+      "(m) " + self.tel_mobile,
+      "(f) " + self.fax,
+      "(e) " + self.email,
+      "(e) " + self.email2,
+      "(e) " + self.email3
+    ]
+    return "<br />".join([c for c in contacts if len(c) > 4])
+  full_contact.short_description = "Contact"
+  full_contact.allow_tags = True
+
   def __unicode__(self):
     return self.facility_name
 

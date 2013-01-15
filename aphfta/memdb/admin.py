@@ -64,7 +64,7 @@ def makeBooleanSelectFilter(field):
   return SelectFilter
 
 class FacilityAdmin(admin.ModelAdmin):
-  list_display = ('facility_name', 'doctor_ic', 'tel_office', 'email', 'region', 'district', 'membership_type', 'membership')
+  list_display = ('facility_name', 'doctor_ic', 'full_contact', 'region', 'district', 'membership_type', 'membership')
   search_fields = ('facility_name', 'doctor_ic', 'tel_office', 'moh_reg_cert', 'email')
   list_filter = (
       makeSelectFilter('membership_type'),
