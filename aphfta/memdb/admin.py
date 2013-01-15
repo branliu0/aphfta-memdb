@@ -1,6 +1,7 @@
 from django.contrib import admin
 from models import Facility
-from helpers.filters import makeSelectFilter, makeBooleanSelectFilter
+from helpers.filters import (makeSelectFilter, makeBooleanSelectFilter,
+                             makeMultiselectFilter)
 
 
 class FacilityAdmin(admin.ModelAdmin):

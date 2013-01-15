@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.template.defaultfilters import slugify
+from django.utils.encoding import force_unicode
 
 # A base class that defines some shared functionality.
 # In particular, it sets the template, and properly sets the title to the
@@ -22,8 +23,9 @@ def makeSelectFilter(field):
 
     def queryset(self, request, qs):
       if self.value():
-        kwargs = {}
-        kwargs[self.field_name] = self.value()
+        kwargs = {
+          self.field_name: self.value()
+        }
         return qs.filter(**kwargs)
       else:
         return qs
@@ -40,6 +42,7 @@ def makeSelectFilter(field):
           truncated = value if len(value) <= 18 else value[0:14] + "..."
           lookups.append((value, truncated))
       return sorted(lookups)
+
   return SelectFilter
 
 # Quite similar to the above select filter, except this is for boolean values.
@@ -49,8 +52,9 @@ def makeBooleanSelectFilter(field):
 
     def queryset(self, request, qs):
       if self.value():
-        kwargs = {}
-        kwargs[self.field_name + "__exact"] = self.value()
+        kwargs = {
+          self.field_name + "__exact": self.value()
+        }
         return qs.filter(**kwargs)
       else:
         return qs
@@ -60,4 +64,39 @@ def makeBooleanSelectFilter(field):
         (0, "No"),
         (1, "Yes"),
       ]
+
   return SelectFilter
+
+def makeMultiselectFilter(field):
+  SelectFilter = makeSelectFilter(field)
+
+  class MultiselectFilter(SelectFilter):
+    template = "admin/multiselect_filter.html"
+
+    def queryset(self, request, qs):
+      if self.value():
+        kwargs = {
+          self.field_name + "__in": self.value().split(",")
+        }
+        return qs.filter(**kwargs)
+      else:
+        return qs
+
+    # Extending the choices method for multiselect functionality
+    # 1. Remove the "All" choice
+    # 2. Include the choice value in the context, so that the corresponding
+    # javascript can properly generate the URL parameter
+    # 3. Include a base_query_string parameter, which includes all the other URL
+    # parameters. Also necessary for properly generating the URL parameter.
+    # 4. Properly checking for selection of the choice
+    def choices(self, cl):
+      for lookup, title in self.lookup_choices:
+        yield {
+          'base_query_string': cl.get_query_string({}, [self.parameter_name]),
+          'selected': self.value() is not None and force_unicode(lookup) in self.value().split(","),
+          'query_string': cl.get_query_string({ self.parameter_name: lookup }, []),
+          'display': title,
+          'value': lookup,
+        }
+
+  return MultiselectFilter
