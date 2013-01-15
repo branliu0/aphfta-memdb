@@ -9,8 +9,15 @@ class SelectFilterBase(admin.SimpleListFilter):
   template = "admin/select_filter.html"
 
   def __init__(self, request, params, model, model_admin):
-    self.field = next(x for x in model._meta.fields if x.name == self.field_name)
-    self.title = getattr(self.field, 'verbose_name', self.field_name)
+    try:
+      field = next(x for x in model._meta.fields if x.name == self.field_name)
+      self.title = getattr(field, 'verbose_name', self.field_name)
+    except StopIteration:
+      # This will happen if the field couldn't be found. This happens for
+      # `ManyToManyField`s because they are treated differently from other fields.
+      # If the verbose_name is needed, we can also search through
+      # `model._meta.local_many_to_many`, but it's not needed at the moment
+      self.title = self.field_name
     self.parameter_name = self.field_name
     super(SelectFilterBase, self).__init__(request, params, model, model_admin)
 
@@ -33,7 +40,7 @@ def makeSelectFilter(field):
     def lookups(self, request, model_admin):
       lookups = []
       for v in model_admin.model.objects.values_list(self.field_name).distinct():
-        value = v[0]
+        value = str(v[0])
         if value:
           # We need to truncate the values so that the select box doesn't
           # get too long and overflow out of the DIV

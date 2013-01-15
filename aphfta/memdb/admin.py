@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import Facility
+from models import Facility, Program
 from helpers.filters import (makeSelectFilter, makeBooleanSelectFilter,
                              makeMultiselectFilter)
 
@@ -21,6 +21,7 @@ class FacilityAdmin(admin.ModelAdmin):
       makeBooleanSelectFilter('icu'),
       makeBooleanSelectFilter('ambulance'),
   )
+  filter_horizontal = ('programs',)
   ordering = ('facility_name',)
 
   class Media:
@@ -31,3 +32,4 @@ class FacilityAdmin(admin.ModelAdmin):
           'scripts/chosen.jquery.min.js')
 
 admin.site.register(Facility, FacilityAdmin)
+admin.site.register(Program)

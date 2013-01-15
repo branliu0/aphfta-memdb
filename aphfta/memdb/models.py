@@ -1,7 +1,13 @@
 from django.db import models
 from helpers import model_helpers
 
-# Create your models here.
+class Program(models.Model):
+  name = models.CharField(max_length=100)
+  description = models.TextField(blank=True)
+
+  def __unicode__(self):
+    return self.name
+
 class Facility(models.Model):
   facility_name = models.CharField('Facility Name', max_length=200)
   date_joined = models.DateField(auto_now_add=True, null=True)
@@ -16,6 +22,9 @@ class Facility(models.Model):
   email = models.EmailField('Email', blank=True)
   email2 = models.EmailField('Email 2', blank=True)
   email3 = models.EmailField('Email 3', blank=True)
+
+  programs = models.ManyToManyField(Program)
+
   moh_reg_cert = models.IntegerField('MOH Facility Registration Certificate No.', blank=True, null=True)
   FACILITY_TYPE = (
          ("VO", 'Vountary Agency'),
@@ -105,24 +114,3 @@ class Facility(models.Model):
     app_label = model_helpers.string_with_title("memdb", "Facility Information")
 #    verbose_name = u'Facility'
     verbose_name_plural = 'facilities'
-
-'''
-Replaced with text area for now
-
-class OtherStaff(models.Model):
-  staff_type = models.CharField(max_length=250)
-  num = models.IntegerField()
-  facility = models.ForeignKey(Facility)
-  def __unicode__(self):
-    return self.staff_type
-
-  class Meta:
-    verbose_name_plural = 'other staff'
-
-class Ward(models.Model):
-  ward_type = models.CharField(max_length=200)
-  num_beds = models.IntegerField()
-  facility = models.ForeignKey(Facility)
-  def __unicode__(self):
-    return self.ward_type
-'''
