@@ -98,6 +98,8 @@ class Facility(models.Model):
   full_contact.short_description = "Contact"
   full_contact.allow_tags = True
 
+  balance = models.IntegerField()
+
   def __unicode__(self):
     return self.facility_name
 
@@ -105,6 +107,14 @@ class Facility(models.Model):
     app_label = model_helpers.string_with_title("memdb", "Facility Information")
 #    verbose_name = u'Facility'
     verbose_name_plural = 'facilities'
+
+class Payment(models.Model):
+  facility = models.ForeignKey(Facility)
+  date = models.DateField()
+  amount = models.IntegerField()
+
+  def __unicode__(self):
+    return str(self.facility) + ': Payment'
 
 '''
 Replaced with text area for now
