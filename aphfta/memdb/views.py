@@ -67,18 +67,48 @@ def payment(request, id=None):
 
     years = {}
     for year in range(past_year, now.year+1):
-        years[str(year)] = {'annual_fee': 2000, 'paid': 100, 'payments': [] }
+        years[str(year)] = {'annual_fee': 2000, 'paid': 0, 'payments': [] }
 
-    payments = Payment.objects.filter(facility_id=id, date__range=[str(past_year)+"-01-01", now.strftime("%Y-%m-%d")]) \
+    past_years = {}
+    past_years = { 'total_fees': 20000 }
+
+    recent_payments = Payment.objects.filter(facility_id=id, date__range=[str(past_year)+"-01-01", now.strftime("%Y-%m-%d")]) \
                               .order_by('date')
 
-    for payment in payments:
-        years[str(payment.date.year)]['payments'].append({"date": payment.date, "amount": payment.amount})
+    old_payments = Payment.objects.filter(facility_id=id, date__range=[str(past_year)+"-01-01", now.strftime("%Y-%m-%d")]) \
+                              .values('amount')
 
-    print years
-    context = Context({'facility': name, "balance": balance, "zone": email, "years": years})
+    old_payment_total = sum(map(lambda x: x['amount'], old_payments))
+
+    past_years["total_paid"] = old_payment_total
+    past_years["balance_remaining"] = past_years["total_fees"] - old_payment_total
+
+    print past_years
+    for payment in recent_payments:
+        year = str(payment.date.year)
+        years[year]['payments'].append({"date": payment.date, "amount": payment.amount})
+        years[year]['paid'] += payment.amount
+
+    context = Context({'facility': name, "balance": balance, "zone": email, "years": years, "past_years": past_years})
     return render(request, 'memdb/payment.html', context)
 
-def add_payment(request, id=None):
+def add_payment(request, facility_id=None):
     print request.POST
-    return HttpResponse("hi")
+    if not request.POST['date']:
+        return HttpResponse("error: missing date")
+    if not request.POST['amount']:
+        return HttpResponse("error: missing amount")
+
+    args = request.POST.dict()
+
+    if len(args) != 2:
+        return HttpResponse("error: need only date and amount")
+
+    args['facility_id'] = facility_id
+    new_payment = Payment(**args)
+    facility = Facility.objects.get(id=facility_id)
+    facility.balance = facility.balance - int(args['amount'])
+    facility.save()
+
+    new_payment.save();
+    return HttpResponse("success")

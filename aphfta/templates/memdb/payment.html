@@ -4,6 +4,21 @@
     <h2 id="facility-balance">Outstanding Balance: TZS {{balance}}</h2>
     <h2 id="facility-region">Region: {{region}}</h2>
 
+    <ul id="past-years" style="float:left">
+      <li class="year">
+         Past Years
+      </li>
+      <li class='total-fees' style="float:bottom">
+        Total Fees: {{past_years.total_fees}}
+      </li>
+      <li class='total-paid' style="float:bottom">
+        Total Paid: {{past_years.total_paid}}
+      </li>
+      <li class='remaining-balance' style="float:bottom">
+        Remaining Balance: {{ past_years.balance_remaining }}
+      </li>
+    </ul>
+
     {% for key, values in years.items|sort %}
     <ul style="float:left">
       <li class="year">
@@ -17,10 +32,10 @@
         {{value.date}}: {{value.amount}}
       </li>
       {% endfor %}
-      <li class='annual_fee' style="float:bottom">
+      <li class='annual-fee' style="float:bottom">
         Annual Fee: {{values.annual_fee}}
       </li>
-      <li class='paid' style="float:bottom">
+      <li class='total-paid' style="float:bottom">
         Total Paid: {{values.paid}}
       </li>
     </ul>
@@ -48,7 +63,8 @@
     adding_payment = false
     $("#add-payment").click(function(event){
       if (!adding_payment) {
-          $(event.target).parent().parent().find('.annual_fee').prepend("<li id='payment-input'>Amount: <input type='text'/></li>");
+          currently_adding = $(event.target).parent().parent();
+          $(event.target).parent().parent().find('.annual-fee').prepend("<li id='payment-input'>Amount: <input type='text'/></li>");
           adding_payment = true;
       }
     });
@@ -58,28 +74,36 @@
 
     now = new Date();
     month = month_names[now.getMonth()];
-    day = now.getDay();
+    day = now.getDate();
     year = now.getFullYear();
     now_str = month + ". " + day + ", " + year;
 
     $("#save-payment").click(function(event) {
         new_payment_value = $('#payment-input input').val();
         $('#payment-input').replaceWith("<li>"+now_str+": "+new_payment_value+"</li>");
-        adding_payment = false
 
         $.ajax({
           // how do i use url tag?
           url: "/members/payments/"+id+"/add",
           type: "post",
           data: {
-                  date: now,
+                  date: year+"-"+now.getMonth()+1+"-"+day,
                   amount: new_payment_value
           },
           beforeSend: function(xhr, settings) {
                   xhr.setRequestHeader("X-CSRFToken", csrftoken);
           },
           success: function(results) {
-            $('#balance-modal').html(results);
+            new_balance = $('#facility-balance').html().match(/\d+/) - new_payment_value;
+            new_total_paid = parseInt(currently_adding.find('.total-paid').html().match(/\d+/)) + parseInt(new_payment_value);
+
+            $('#facility-balance').html("Outstanding Balance: TZS " + new_balance);
+            currently_adding.find('.total-paid').html("Total Paid: " + new_total_paid);
+
+            $("#add-payment").hide();
+          },
+          error: function(results) {
+              $('#balance-modal').html("There was an error, try again later.");
           }
         });
     });
