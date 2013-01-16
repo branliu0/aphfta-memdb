@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.template.defaultfilters import slugify
+from django.template.defaultfilters import slugify, title
 from django.utils.encoding import force_unicode
 
 # A base class that defines some shared functionality.
@@ -11,7 +11,7 @@ class SelectFilterBase(admin.SimpleListFilter):
   def __init__(self, request, params, model, model_admin):
     try:
       field = next(x for x in model._meta.fields if x.name == self.field_name)
-      self.title = getattr(field, 'verbose_name', self.field_name)
+      self.title = title(getattr(field, 'verbose_name', self.field_name))
     except StopIteration:
       # This will happen if the field couldn't be found. This happens for
       # `ManyToManyField`s because they are treated differently from other fields.
