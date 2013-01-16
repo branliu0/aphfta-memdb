@@ -10,8 +10,8 @@ class SelectFilterBase(admin.SimpleListFilter):
 
   def __init__(self, request, params, model, model_admin):
     try:
-      field = next(x for x in model._meta.fields if x.name == self.field_name)
-      self.title = title(getattr(field, 'verbose_name', self.field_name))
+      self.field = next(x for x in model._meta.fields if x.name == self.field_name)
+      self.title = title(getattr(self.field, 'verbose_name', self.field_name))
     except StopIteration:
       # This will happen if the field couldn't be found. This happens for
       # `ManyToManyField`s because they are treated differently from other fields.
@@ -40,14 +40,24 @@ def makeSelectFilter(field):
     def lookups(self, request, model_admin):
       lookups = []
       for v in model_admin.model.objects.values_list(self.field_name).distinct():
-        value = str(v[0])
+        key = value = str(v[0])
+
+        # If the field we're dealing with has an enum, then show the value of the enum
+        # rather than the enum key
+        if self.field and self.field._choices:
+          try:
+            choice = next(v for v in self.field._choices if v[0] == value)
+            value = choice[1]
+          except StopIteration:
+            pass
         if value:
           # We need to truncate the values so that the select box doesn't
           # get too long and overflow out of the DIV
           # Also, Django 1.3 doesn't have the truncatechars filter, so
           # I'm rewriting it here...
-          truncated = value if len(value) <= 18 else value[0:14] + "..."
-          lookups.append((value, truncated))
+          trunc_len = 18
+          truncated = value if len(value) <= trunc_len else value[0:(trunc_len-4)] + "..."
+          lookups.append((key, truncated))
       return sorted(lookups)
 
   return SelectFilter
