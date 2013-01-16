@@ -12,6 +12,7 @@ class FacilityAdmin(admin.ModelAdmin):
       makeSelectFilter('membership_type'),
       makeSelectFilter('region'),
       makeSelectFilter('district'),
+      makeSelectFilter('zone'),
       makeBooleanSelectFilter('lab'),
       makeBooleanSelectFilter('xray'),
       makeBooleanSelectFilter('blood_bank'),
