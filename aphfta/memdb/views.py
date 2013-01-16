@@ -4,7 +4,9 @@ from django.template import Context, loader
 from django.core.urlresolvers import reverse
 
 from memdb.models import Facility
+from memdb.models import Payment
 from memdb.forms import FacilityForm
+import datetime
 
 from django.utils import timezone
 
@@ -53,10 +55,30 @@ def update(request, id=None):
   return render(request, 'memdb/clinicForm.html', context)
 
 def payment(request, id=None):
+    history_range = 4
+
     facility = get_object_or_404(Facility, id=id)
     name = facility.facility_name
     balance = facility.balance
     email = facility.email
 
-    context = Context({'facility': name, "balance": balance, "zone": email})
+    now = datetime.datetime.now()
+    past_year = now.year - history_range + 1;
+
+    years = {}
+    for year in range(past_year, now.year+1):
+        years[str(year)] = {'annual_fee': 2000, 'paid': 100, 'payments': [] }
+
+    payments = Payment.objects.filter(facility_id=id, date__range=[str(past_year)+"-01-01", now.strftime("%Y-%m-%d")]) \
+                              .order_by('date')
+
+    for payment in payments:
+        years[str(payment.date.year)]['payments'].append({"date": payment.date, "amount": payment.amount})
+
+    print years
+    context = Context({'facility': name, "balance": balance, "zone": email, "years": years})
     return render(request, 'memdb/payment.html', context)
+
+def add_payment(request, id=None):
+    print request.POST
+    return HttpResponse("hi")

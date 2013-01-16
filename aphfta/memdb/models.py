@@ -114,7 +114,7 @@ class Payment(models.Model):
   amount = models.IntegerField()
 
   def __unicode__(self):
-    return str(self.facility) + ': Payment'
+    return str(self.facility) + ': ' + str(self.amount)
 
 '''
 Replaced with text area for now

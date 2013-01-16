@@ -1,5 +1,88 @@
+{% load tags %}
 <div>
     <h1 id="facility-name">{{facility}}</h1>
     <h2 id="facility-balance">Outstanding Balance: TZS {{balance}}</h2>
     <h2 id="facility-region">Region: {{region}}</h2>
+
+    {% for key, values in years.items|sort %}
+    <ul style="float:left">
+      <li class="year">
+        {{key}}
+        {% if forloop.last %}
+          <a id="add-payment" href="#">Add Payment</a>
+        {% endif %}
+      </li>
+      {% for value in values.payments %}
+      <li>
+        {{value.date}}: {{value.amount}}
+      </li>
+      {% endfor %}
+      <li class='annual_fee' style="float:bottom">
+        Annual Fee: {{values.annual_fee}}
+      </li>
+      <li class='paid' style="float:bottom">
+        Total Paid: {{values.paid}}
+      </li>
+    </ul>
+    {% endfor %}
+
+    <button id="save-payment" style="position:absolute;bottom:20px;right:40px">Save Payment</button>
+<script>
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+
+    adding_payment = false
+    $("#add-payment").click(function(event){
+      if (!adding_payment) {
+          $(event.target).parent().parent().find('.annual_fee').prepend("<li id='payment-input'>Amount: <input type='text'/></li>");
+          adding_payment = true;
+      }
+    });
+
+    var month_names = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+
+    now = new Date();
+    month = month_names[now.getMonth()];
+    day = now.getDay();
+    year = now.getFullYear();
+    now_str = month + ". " + day + ", " + year;
+
+    $("#save-payment").click(function(event) {
+        new_payment_value = $('#payment-input input').val();
+        $('#payment-input').replaceWith("<li>"+now_str+": "+new_payment_value+"</li>");
+        adding_payment = false
+
+        $.ajax({
+          // how do i use url tag?
+          url: "/members/payments/"+id+"/add",
+          type: "post",
+          data: {
+                  date: now,
+                  amount: new_payment_value
+          },
+          beforeSend: function(xhr, settings) {
+                  xhr.setRequestHeader("X-CSRFToken", csrftoken);
+          },
+          success: function(results) {
+            $('#balance-modal').html(results);
+          }
+        });
+    });
+
+</script>
 </div>

@@ -10,10 +10,11 @@
     padding: 10px;
 }
 
-#facility-name {
-    margin:5px 0px 0.5em 2px;
+#facility-balance {
+    margin:5px 0px 0.5em 0px;
 }
 
-#facility-balance {
-    margin:5px 0px 0.5em 2px;
+#facility-region {
+    margin:5px 0px 0.5em 0px;
 }
+
