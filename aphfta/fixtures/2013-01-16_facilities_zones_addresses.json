@@ -4543,23 +4543,6 @@
     }
   },
   {
-    "pk": 377,
-    "model": "memdb.facility",
-    "fields": {
-      "tel_office": "",
-      "membership_type": "Hospital",
-      "zone": "CZ",
-      "district": "",
-      "facility_name": "Walter Hospital",
-      "doctor_ic": "",
-      "membership": true,
-      "region": "Dar",
-      "email": "",
-      "date_joined": "2012-01-20",
-      "address": "P. O. Box 45567"
-    }
-  },
-  {
     "pk": 378,
     "model": "memdb.facility",
     "fields": {
