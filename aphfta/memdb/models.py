@@ -14,6 +14,13 @@ class Facility(models.Model):
   address = models.CharField('Address', max_length=250, blank=True)
   district = models.CharField('District', max_length=250, blank=True)
   region = models.CharField('Region', max_length=250, blank=True)
+  ZONES = (
+      ("NZ", "Northern Zone"),
+      ("CZ", "Coastal Zone"),
+      ("LZ", "Lake Zone"),
+      ("SZ", "Southern Zone")
+  )
+  zone = models.CharField(max_length=2, blank=True, choices=ZONES)
   tel_office = models.CharField('Tel No. Office', max_length=250, blank=True)
   tel_office2 = models.CharField('Tel No. Office 2', max_length=250, blank=True)
   tel_office3 = models.CharField('Tel No. Office 3', max_length=250, blank=True)
