@@ -116,6 +116,20 @@ class Payment(models.Model):
   def __unicode__(self):
     return str(self.facility) + ': ' + str(self.amount)
 
+class Fee(models.Model):
+  year = models.IntegerField()
+  region = models.CharField(max_length=250)
+  FEE_TYPE = (
+         ("R", 'Registration'),
+         ("A", '')
+  )
+  type = models.CharField('Fee Type', max_length = 1, choices=FEE_TYPE, blank=True)
+  amount = amount = models.IntegerField()
+  facility = models.ManyToManyField(Facility)
+
+  def __unicode__(self):
+    return str(self.region) + ': ' + str(self.year) + " " + str(type)
+
 '''
 Replaced with text area for now
 

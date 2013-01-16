@@ -55,7 +55,7 @@ def update(request, id=None):
   return render(request, 'memdb/clinicForm.html', context)
 
 def payment(request, id=None):
-    history_range = 4
+    history_range = 3
 
     facility = get_object_or_404(Facility, id=id)
     name = facility.facility_name
