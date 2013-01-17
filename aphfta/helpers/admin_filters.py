@@ -52,13 +52,7 @@ def SelectFilter(field):
           except StopIteration:
             pass
         if value:
-          # We need to truncate the values so that the select box doesn't
-          # get too long and overflow out of the DIV
-          # Also, Django 1.3 doesn't have the truncatechars filter, so
-          # I'm rewriting it here...
-          trunc_len = 18
-          truncated = value if len(value) <= trunc_len else value[0:(trunc_len-4)] + "..."
-          lookups.append((key, truncated))
+          lookups.append((key, value))
       return sorted(lookups)
 
   return SelectFilter
