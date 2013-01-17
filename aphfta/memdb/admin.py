@@ -29,10 +29,33 @@ class FacilityAdmin(admin.ModelAdmin):
   edit_balance.allow_tags = True
 
 class FeeAdmin(admin.ModelAdmin):
-  list_display = ('year', 'type', 'amount')
-  search_fields = ('year', 'type', 'amount')
+  list_display = ('name', 'year', 'type', 'amount')
+  search_fields = ('name', 'year', 'type', 'amount')
 
   filter_horizontal = ("facility",)
+
+  '''
+    This was originally meant for when you you could either add all regions in a clinic, or add individual clinics,
+    now you can do both at the same time
+
+  def save_related(self, request, form, formsets, change):
+    if request.POST.get('region'):
+      post = request.POST.dict()
+      for facility in Facility.objects.filter(region__iexact=request.POST.get('region')):
+        facility.fee_set.add(self.latest_fee)
+
+  def save_model(self, request, obj, form, change):
+    self.latest_fee = obj
+    # alteredPOST = request.POST.copy()
+    # if not request.POST.get('facility'):
+      # for facility in Facility.objects.filter(region__iexact=request.POST.get('region')):
+        # obj.facility.add(facility)
+
+    obj.save()
+  '''
+
+  def clean_facility(self):
+    print "hey there"
 
   @staticmethod
   def getName():

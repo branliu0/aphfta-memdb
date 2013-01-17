@@ -8,7 +8,7 @@
 
           <div class="form-row field-region">
               <label for="region-select">Region:</label>
-              <select id="region-select">
+              <select id="region-select" name="region">
                 <option value="none" selected="selected">None</option>
                 {% for region in adminform.model_admin.getRegions %}
                   {% if region != "" %}
@@ -45,10 +45,32 @@
 </fieldset>
 <script>
   $('#region-select').change(function() {
-      if ($('#region-select').val() == "none") {
-        $('.field-facility').show();
-      } else {
-        $('.field-facility').hide();
-      }
+      region = $('#region-select').val();
+
+      $.ajax({
+        url: "/members/regions/"+region,
+        type: 'get',
+        success: function(results) {
+          input_str = '';
+          results = JSON.parse(results);
+          console.log(results);
+
+          SelectBox.cache["id_facility_from"] = [];
+          SelectBox.cache["id_facility_to"] = [];
+
+          for (var i = 0; i < results.include.length; i++) {
+            SelectBox.add_to_cache('id_facility_to', {'value': results.include[i].id,
+                                                      'text': results.include[i].name})
+          }
+
+          for (var i = 0; i < results.exclude.length; i++) {
+            SelectBox.add_to_cache('id_facility_from', {'value': results.exclude[i].id,
+                                                        'text': results.exclude[i].name})
+          }
+
+          SelectBox.redisplay("id_facility_to");
+          SelectBox.redisplay("id_facility_from");
+        }
+      });
   });
 </script>

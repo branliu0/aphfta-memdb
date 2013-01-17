@@ -7,6 +7,7 @@ from memdb.models import Facility
 from memdb.models import Payment
 from memdb.forms import FacilityForm
 import datetime
+import json
 
 from django.utils import timezone
 
@@ -112,3 +113,12 @@ def add_payment(request, facility_id=None):
 
     new_payment.save();
     return HttpResponse("success")
+
+def region(request, region='Dar'):
+    facilities = Facility.objects.filter(region=region)
+    exclude_facilities = Facility.objects.exclude(region=region)
+    facility_names = map(lambda x: { 'id': x.id, 'name': x.facility_name }, facilities)
+    exclude_facility_names = map(lambda x: { 'id': x.id, 'name': x.facility_name }, exclude_facilities)
+    all_facilities = {'include': facility_names, 'exclude': exclude_facility_names}
+
+    return HttpResponse(json.dumps(all_facilities))
