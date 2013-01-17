@@ -10,12 +10,32 @@
 
 <script type="text/javascript">
   // Automatically navigate to the new query URL on select
-  (function($) {
-    $(function() {
-      $("select#select_filter_{{ title|slugify }}").change(function(e) {
-        window.location = window.location.pathname +
-            $(this).find("option:selected").attr("data-href");
-      });
+  $(function() {
+    $("select#select_filter_{{ title|slugify }}").chosen().change(function(e) {
+      window.location = window.location.pathname +
+          $(this).find("option:selected").attr("data-href");
     });
-   })(django.jQuery);
+  });
 </script>
+
+<style type="text/css">
+  /*
+   * The Django admin CSS selectors bind stronger than the Chosen CSS selectors,
+   * so I have to copy over a few of the CSS selectors to get the styling to look good.
+   * I added a few of my own styles too, to make it look better
+   */
+  #select_filter_{{ title|slugify }} + .chzn-container {
+    margin-top: 4px;
+    margin-left: 10px;
+  }
+  #select_filter_{{ title|slugify }} + .chzn-container .chzn-results {
+    padding-left: 4px;
+    margin: 0 4px 4px 0;
+  }
+  #select_filter_{{ title|slugify }} + .chzn-container .chzn-results li {
+    padding: 5px 6px;
+  }
+  #select_filter_{{ title|slugify }} + .chzn-container-single .chzn-single span {
+    overflow: visible;
+  }
+</style>
