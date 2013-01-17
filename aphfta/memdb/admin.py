@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import Facility
+from models import Facility, Fee
 from helpers.filters import makeSelectFilter, makeBooleanSelectFilter
 
 
@@ -28,6 +28,19 @@ class FacilityAdmin(admin.ModelAdmin):
     return '<a class="balance" data-id="{0}" href="#">{1}</a>'.format(obj.id, obj.balance)
   edit_balance.allow_tags = True
 
+class FeeAdmin(admin.ModelAdmin):
+  list_display = ('year', 'type', 'amount')
+  search_fields = ('year', 'type', 'amount')
 
+  filter_horizontal = ("facility",)
+
+  @staticmethod
+  def getName():
+    return "Fee"
+
+  @staticmethod
+  def getRegions():
+    return map(lambda x: x['region'], Facility.objects.values('region').distinct())
 
 admin.site.register(Facility, FacilityAdmin)
+admin.site.register(Fee, FeeAdmin)

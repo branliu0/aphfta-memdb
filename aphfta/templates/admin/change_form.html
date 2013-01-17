@@ -6,10 +6,19 @@
 {% block extrahead %}{{ block.super }}
 {% url 'admin:jsi18n' as jsi18nurl %}
 <script type="text/javascript" src="{{ jsi18nurl|default:"../../../jsi18n/" }}"></script>
+<!-- For some reason static_url isn't working -->
+<script src= "/static/scripts/jquery-1.8.3.min.js"></script>
+<script src= "/static/scripts/jquery-ui-1.9.2.custom.min.js"></script>
+<script src= "/static/scripts/jquery.simplemodal-1.4.3.js"></script>
+
 {{ media }}
 {% endblock %}
 
-{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />{% endblock %}
+{% block extrastyle %}
+<link rel="stylesheet" href= "/static/css/jquery-ui-1.9.2.custom.min.css" />
+<link rel="stylesheet" href="/static/css/base.css" />
+{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />
+{% endblock %}
 
 {% block coltype %}{% if ordered_objects %}colMS{% else %}colM{% endif %}{% endblock %}
 
@@ -50,7 +59,11 @@
 
 {% block field_sets %}
 {% for fieldset in adminform %}
-  {% include "admin/includes/fieldset.html" %}
+  {% if adminform.model_admin.getName == "Fee" %}
+    {% include "admin/includes/fee_fieldset.html" %}
+  {% else %}
+    {% include "admin/includes/fieldset.html" %}
+  {% endif %}
 {% endfor %}
 {% endblock %}
 

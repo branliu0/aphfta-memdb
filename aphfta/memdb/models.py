@@ -118,10 +118,9 @@ class Payment(models.Model):
 
 class Fee(models.Model):
   year = models.IntegerField()
-  region = models.CharField(max_length=250)
   FEE_TYPE = (
-         ("R", 'Registration'),
-         ("A", '')
+         ("R", 'Registration Fee'),
+         ("A", 'Annual Fee')
   )
   type = models.CharField('Fee Type', max_length = 1, choices=FEE_TYPE, blank=True)
   amount = amount = models.IntegerField()
@@ -129,24 +128,3 @@ class Fee(models.Model):
 
   def __unicode__(self):
     return str(self.region) + ': ' + str(self.year) + " " + str(type)
-
-'''
-Replaced with text area for now
-
-class OtherStaff(models.Model):
-  staff_type = models.CharField(max_length=250)
-  num = models.IntegerField()
-  facility = models.ForeignKey(Facility)
-  def __unicode__(self):
-    return self.staff_type
-
-  class Meta:
-    verbose_name_plural = 'other staff'
-
-class Ward(models.Model):
-  ward_type = models.CharField(max_length=200)
-  num_beds = models.IntegerField()
-  facility = models.ForeignKey(Facility)
-  def __unicode__(self):
-    return self.ward_type
-'''
