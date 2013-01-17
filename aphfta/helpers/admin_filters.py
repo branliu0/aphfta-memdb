@@ -1,4 +1,7 @@
+from operator import itemgetter
+
 from django.contrib import admin
+from django.core.exceptions import FieldError
 from django.template.defaultfilters import slugify, title
 from django.utils.encoding import force_unicode
 
@@ -9,22 +12,20 @@ class SelectFilterBase(admin.SimpleListFilter):
   template = "admin/select_filter.html"
 
   def __init__(self, request, params, model, model_admin):
-    try:
-      self.field = next(x for x in model._meta.fields if x.name == self.field_name)
-      self.title = title(getattr(self.field, 'verbose_name', self.field_name))
-    except StopIteration:
-      # This will happen if the field couldn't be found. This happens for
-      # `ManyToManyField`s because they are treated differently from other fields.
-      # If the verbose_name is needed, we can also search through
-      # `model._meta.local_many_to_many`, but it's not needed at the moment
-      self.title = self.field_name
+    if not self.title:
+      try:
+        self.field = next(x for x in model._meta.fields if x.name == self.field_name)
+        self.title = title(getattr(self.field, 'verbose_name', self.field_name))
+      except StopIteration:
+        raise FieldError("The field %s could not be found on the model %s" %
+                        (self.field_name, model.__name__))
     self.parameter_name = self.field_name
     super(SelectFilterBase, self).__init__(request, params, model, model_admin)
 
 # Generates a SelectFilter class for the given field. Nearly identical to the
 # default Django filter, except that it uses a HTML select rather than an
 # unordered list.
-def makeSelectFilter(field):
+def SelectFilter(field):
   class SelectFilter(SelectFilterBase):
     field_name = field
 
@@ -63,7 +64,7 @@ def makeSelectFilter(field):
   return SelectFilter
 
 # Quite similar to the above select filter, except this is for boolean values.
-def makeBooleanSelectFilter(field):
+def BooleanSelectFilter(field):
   class SelectFilter(SelectFilterBase):
     field_name = field
 
@@ -84,10 +85,10 @@ def makeBooleanSelectFilter(field):
 
   return SelectFilter
 
-def makeMultiselectFilter(field):
-  SelectFilter = makeSelectFilter(field)
+def MultiselectFilter(field):
+  SelectFilterClass = SelectFilter(field)
 
-  class MultiselectFilter(SelectFilter):
+  class MultiselectFilter(SelectFilterClass):
     template = "admin/multiselect_filter.html"
 
     def queryset(self, request, qs):
@@ -117,3 +118,35 @@ def makeMultiselectFilter(field):
         }
 
   return MultiselectFilter
+
+def M2MSelectFilter(field, foreign_display_field):
+  SelectFilterClass = SelectFilter(field)
+
+  class M2MSelectFilter(SelectFilterClass):
+
+    def __init__(self, request, params, model, model_admin):
+      try:
+        self.field = next(f for f in model._meta.local_many_to_many
+                          if f.name == field)
+        self.title = title(getattr(self.field, 'verbose_name', self.field_name))
+      except StopIteration:
+        raise FieldError("ManyToManyField %s could not be found on the model %s" %
+                         (field_name, model.__name__))
+      super(M2MSelectFilter, self).__init__(request, params, model, model_admin)
+
+    def lookups(self, request, model_admin):
+      lookups = super(M2MSelectFilter, self).lookups(request, model_admin)
+      new_lookups = []
+      related_model = self.field.related.parent_model
+      foreign_lookup = related_model.objects.values('id', foreign_display_field)
+      for lookup, title in lookups:
+        try:
+          id = int(lookup)
+          title = next(f for f in foreign_lookup if f["id"] == int(lookup))[foreign_display_field]
+        except ValueError, StopIteration:
+          # Only let actual field values be valid choices
+          continue
+        new_lookups.append((lookup, title))
+      return sorted(new_lookups, key=itemgetter(1))
+
+  return M2MSelectFilter

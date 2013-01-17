@@ -1,7 +1,6 @@
 from django.contrib import admin
 from models import Facility, Program
-from helpers.admin_filters import (makeSelectFilter, makeBooleanSelectFilter,
-                             makeMultiselectFilter)
+from helpers.admin_filters import SelectFilter, BooleanSelectFilter, M2MSelectFilter
 
 
 class FacilityAdmin(admin.ModelAdmin):
@@ -9,18 +8,19 @@ class FacilityAdmin(admin.ModelAdmin):
   list_editable = ('doctor_ic', )
   search_fields = ('facility_name', 'doctor_ic', 'tel_office', 'moh_reg_cert', 'email')
   list_filter = (
-      makeSelectFilter('membership_type'),
-      makeSelectFilter('region'),
-      makeSelectFilter('district'),
-      makeSelectFilter('zone'),
-      makeBooleanSelectFilter('lab'),
-      makeBooleanSelectFilter('xray'),
-      makeBooleanSelectFilter('blood_bank'),
-      makeBooleanSelectFilter('pharmacy'),
-      makeBooleanSelectFilter('dental'),
-      makeBooleanSelectFilter('ultrasonography'),
-      makeBooleanSelectFilter('icu'),
-      makeBooleanSelectFilter('ambulance'),
+      SelectFilter('membership_type'),
+      SelectFilter('region'),
+      SelectFilter('district'),
+      SelectFilter('zone'),
+      M2MSelectFilter('programs', 'name'),
+      BooleanSelectFilter('lab'),
+      BooleanSelectFilter('xray'),
+      BooleanSelectFilter('blood_bank'),
+      BooleanSelectFilter('pharmacy'),
+      BooleanSelectFilter('dental'),
+      BooleanSelectFilter('ultrasonography'),
+      BooleanSelectFilter('icu'),
+      BooleanSelectFilter('ambulance'),
   )
   filter_horizontal = ('programs',)
   ordering = ('facility_name',)
