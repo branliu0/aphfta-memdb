@@ -1,3 +1,5 @@
+import operator as op
+
 from django.db import models
 from helpers import model_helpers
 
@@ -30,7 +32,7 @@ class Facility(models.Model):
   email2 = models.EmailField('Email 2', blank=True)
   email3 = models.EmailField('Email 3', blank=True)
 
-  programs = models.ManyToManyField(Program)
+  programs = models.ManyToManyField(Program, blank=True)
 
   moh_reg_cert = models.IntegerField('MOH Facility Registration Certificate No.', blank=True, null=True)
   FACILITY_TYPE = (
@@ -113,6 +115,10 @@ class Facility(models.Model):
     return "<br />".join([c for c in contacts if len(c) > 4])
   full_contact.short_description = "Contact"
   full_contact.allow_tags = True
+
+  def programs_list(self):
+    return ",".join(map(op.itemgetter(0), self.programs.values_list('name'))) \
+        or "None"
 
   def __unicode__(self):
     return self.facility_name
