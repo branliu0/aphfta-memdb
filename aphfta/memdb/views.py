@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 
 from memdb.models import Facility
 from memdb.models import Payment
+from memdb.models import Fee
 from memdb.forms import FacilityForm
 import datetime
 import json
@@ -59,8 +60,8 @@ def payment(request, id=None):
     history_range = 3
 
     facility = get_object_or_404(Facility, id=id)
+    # error checking
     name = facility.facility_name
-    balance = facility.balance
     email = facility.email
 
     now = datetime.datetime.now()
@@ -68,27 +69,39 @@ def payment(request, id=None):
 
     years = {}
     for year in range(past_year, now.year+1):
-        years[str(year)] = {'annual_fee': 2000, 'paid': 0, 'payments': [] }
+        years[str(year)] = {'annual_fee': 0, 'paid': 0, 'payments': [] }
 
     past_years = {}
-    past_years = { 'total_fees': 20000 }
+
+    recent_fees = Fee.objects.filter(facility=id, year__gte=str(past_year))
+    old_fees  = Fee.objects.filter(facility=id, year__lt=str(past_year))
 
     recent_payments = Payment.objects.filter(facility_id=id, date__range=[str(past_year)+"-01-01", now.strftime("%Y-%m-%d")]) \
                               .order_by('date')
-
-    old_payments = Payment.objects.filter(facility_id=id, date__range=[str(past_year)+"-01-01", now.strftime("%Y-%m-%d")]) \
+    old_payments = Payment.objects.filter(facility_id=id, date__lt=str(past_year)+"-01-01") \
                               .values('amount')
 
-    old_payment_total = sum(map(lambda x: x['amount'], old_payments))
+    old_fees_total = sum(map(lambda x: x.amount, old_fees))
+    recent_fees_total = sum(map(lambda x: x.amount, recent_fees))
 
+    old_payment_total = sum(map(lambda x: x['amount'], old_payments))
+    recent_payment_total = sum(map(lambda x: x.amount, recent_payments))
+
+    past_years["total_fees"] = old_fees_total
     past_years["total_paid"] = old_payment_total
-    past_years["balance_remaining"] = past_years["total_fees"] - old_payment_total
+    past_years["balance_remaining"] = old_fees_total - old_payment_total
 
     print past_years
     for payment in recent_payments:
         year = str(payment.date.year)
         years[year]['payments'].append({"date": payment.date, "amount": payment.amount})
         years[year]['paid'] += payment.amount
+
+    for fee in recent_fees:
+        year = str(fee.year)
+        years[year]['annual_fee'] += fee.amount
+
+    balance = (old_fees_total + recent_fees_total) - (old_payment_total + recent_payment_total)
 
     context = Context({'facility': name, "balance": balance, "zone": email, "years": years, "past_years": past_years})
     return render(request, 'memdb/payment.html', context)
@@ -108,7 +121,6 @@ def add_payment(request, facility_id=None):
     args['facility_id'] = facility_id
     new_payment = Payment(**args)
     facility = Facility.objects.get(id=facility_id)
-    facility.balance = facility.balance - int(args['amount'])
     facility.save()
 
     new_payment.save();

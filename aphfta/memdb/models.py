@@ -1,5 +1,6 @@
 from django.db import models
 from helpers import model_helpers
+from django.db.models import Sum
 
 # Create your models here.
 class Facility(models.Model):
@@ -98,7 +99,18 @@ class Facility(models.Model):
   full_contact.short_description = "Contact"
   full_contact.allow_tags = True
 
-  balance = models.IntegerField()
+  def balance(self):
+    fees = Fee.objects.filter(facility=self.id).aggregate(Sum('amount'))
+    print fees
+    payments = Payment.objects.filter(facility=self.id).aggregate(Sum('amount'))
+    print payments
+
+    if fees['amount__sum'] == None:
+      fees['amount__sum'] = 0
+    if payments['amount__sum'] == None:
+      payments['amount__sum'] = 0
+
+    return fees['amount__sum'] - payments['amount__sum']
 
   def __unicode__(self):
     return self.facility_name
