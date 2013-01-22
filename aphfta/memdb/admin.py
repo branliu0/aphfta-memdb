@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import Facility, Fee
+from models import Facility, Fee, Payment
 from helpers.filters import makeSelectFilter, makeBooleanSelectFilter
 
 
@@ -65,5 +65,10 @@ class FeeAdmin(admin.ModelAdmin):
   def getRegions():
     return map(lambda x: x['region'], Facility.objects.values('region').distinct())
 
+class PaymentAdmin(admin.ModelAdmin):
+  list_display = ('facility', 'date', 'amount')
+  search_display = ('facility', 'date', 'amount')
+
 admin.site.register(Facility, FacilityAdmin)
 admin.site.register(Fee, FeeAdmin)
+admin.site.register(Payment, PaymentAdmin)
