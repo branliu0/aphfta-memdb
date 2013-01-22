@@ -136,4 +136,4 @@ class Fee(models.Model):
   facility = models.ManyToManyField(Facility, blank=True)
 
   def __unicode__(self):
-    return str(self.year) + " " + str(type)
+    return str(self.year) + " " + str(self.type)
