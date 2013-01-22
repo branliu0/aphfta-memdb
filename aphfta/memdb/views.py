@@ -72,9 +72,6 @@ def payment(request, id=None):
     start_year = now.year - range_start + 1
     end_year = now.year - range_end
 
-    print start_year
-    print end_year
-
     years = {}
     for year in range(start_year, end_year+1):
         years[str(year)] = {'annual_fee': 0, 'paid': 0, 'payments': [] }
@@ -111,8 +108,8 @@ def payment(request, id=None):
     recent_payments = Payment.objects.filter(facility_id=id, date__range=[str(start_year)+"-01-01", str(end_year)+"-12-31"]) \
                               .order_by('date')
 
-    total_fees = Fee.objects.filter(facility=id).aggregate(Sum('amount'))
-    total_payments = Payment.objects.filter(facility_id=id).aggregate(Sum('amount'))
+    total_fees = Fee.objects.filter(facility=id, year__lte=now.year).aggregate(Sum('amount'))
+    total_payments = Payment.objects.filter(facility_id=id, date__lte=str(now.year)+"-12-31").aggregate(Sum('amount'))
     balance = total_fees["amount__sum"] - total_payments["amount__sum"]
 
     context = Context({"facility_name": name, "balance": balance, "region": region, "years": years, \

@@ -1,11 +1,13 @@
 {% load tags %}
-<div>
+
+<div class="btn right"><span class="icon right"></span></div>
+<div class="btn left"><span class="icon left"></span></div>
+
+<div id="modal-contents">
     <h1 id="facility-name">{{facility_name}}</h1>
     <h2 id="facility-balance">Outstanding Balance: TZS {{balance}}</h2>
     <h2 id="facility-region">Region: {{region}}</h2>
 
-    <div class="btn right"><span class="icon right"></span></div>
-    <div class="btn left"><span class="icon left"></span></button>
 
     <div id="payment-list">
       <li class="payment-container">

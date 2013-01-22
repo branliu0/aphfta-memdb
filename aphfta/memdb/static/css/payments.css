@@ -4,7 +4,7 @@
 }
 
 .current-years li {
-  width: 140px;
+  width: 175px;
   overflow: visible;
   margin-left: 2px;
   margin-right: 2px;
@@ -12,7 +12,7 @@
 
 #past-years {
   margin-right: 15px;
-  width: 185px;
+  width: 175px;
 }
 
 #payment-list {
@@ -21,15 +21,6 @@
 
 #payment-list li {
   list-style: none;
-}
-
-.total-fees {
-}
-
-.total-paid {
-}
-
-.remaining-balance {
 }
 
 ul {
@@ -101,3 +92,7 @@ ul {
     -ms-filter: "FlipH";
 }
 
+#modal-contents {
+    position: relative;
+    left: 43px;
+}
