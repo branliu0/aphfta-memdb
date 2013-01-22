@@ -53,9 +53,11 @@
               Paid: {{values.paid}}
             </div>
             {% if forloop.last %}
-              <div class='current-remaining-balance'>
-                Balance: {{balance}}
-              </div>
+              {% if interval == 1 %}
+                <div class='current-remaining-balance'>
+                  Balance: {{balance}}
+                </div>
+              {% endif %}
             {% endif %}
           </li>
         </ul>
@@ -132,6 +134,34 @@
           }
         });
     });
+
+    $('.btn.left').click(function(){
+      $.ajax({
+        // how do i use url tag?
+        url: "/members/payments/" + id,
+        data: {
+          interval: {{ interval }} + 1
+        },
+        success: function(results) {
+          $('#balance-modal').html(results);
+        }
+      });
+    });
+
+    $('.btn.right').click(function(){
+      $.ajax({
+        // how do i use url tag?
+        url: "/members/payments/" + id,
+        data: {
+          interval: {{interval}} - 1
+        },
+        success: function(results) {
+          $('#balance-modal').html(results);
+        }
+      });
+    });
+
+
 
 </script>
 </div>

@@ -4,8 +4,10 @@
 }
 
 .current-years li {
-  width: 185px;
+  width: 140px;
   overflow: visible;
+  margin-left: 2px;
+  margin-right: 2px;
 }
 
 #past-years {
