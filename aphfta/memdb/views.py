@@ -62,7 +62,7 @@ def payment(request, id=None):
     facility = get_object_or_404(Facility, id=id)
     # error checking
     name = facility.facility_name
-    email = facility.email
+    region = facility.region
 
     now = datetime.datetime.now()
     past_year = now.year - history_range + 1;
@@ -103,7 +103,9 @@ def payment(request, id=None):
 
     balance = (old_fees_total + recent_fees_total) - (old_payment_total + recent_payment_total)
 
-    context = Context({'facility': name, "balance": balance, "zone": email, "years": years, "past_years": past_years})
+    context = Context({"facility_name": name, "balance": balance, "region": region, "years": years, \
+                       "past_years": past_years, "facility_id": id})
+
     return render(request, 'memdb/payment.html', context)
 
 def add_payment(request, facility_id=None):

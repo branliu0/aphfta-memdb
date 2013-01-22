@@ -1,47 +1,67 @@
 {% load tags %}
 <div>
-    <h1 id="facility-name">{{facility}}</h1>
+    <h1 id="facility-name">{{facility_name}}</h1>
     <h2 id="facility-balance">Outstanding Balance: TZS {{balance}}</h2>
     <h2 id="facility-region">Region: {{region}}</h2>
 
-    <ul id="past-years" style="float:left">
-      <li class="year">
-         Past Years
+    <div id="payment-list">
+      <li class="payment-container">
+        <div>
+          <ul id="past-years" style="float:left">
+            <li class="year">
+               Past Years
+            </li>
+            <li class='yearly-summary'>
+              <div class='total-fees'>
+                Fees: {{past_years.total_fees}}
+              </div>
+              <div class='total-paid'>
+                Paid: {{past_years.total_paid}}
+              </div>
+              <div class='remaining-balance'>
+                Remaining: {{ past_years.balance_remaining }}
+              </div>
+            </li>
+          </ul>
+        </div>
       </li>
-      <li class='total-fees' style="float:bottom">
-        Total Fees: {{past_years.total_fees}}
-      </li>
-      <li class='total-paid' style="float:bottom">
-        Total Paid: {{past_years.total_paid}}
-      </li>
-      <li class='remaining-balance' style="float:bottom">
-        Remaining Balance: {{ past_years.balance_remaining }}
-      </li>
-    </ul>
 
-    {% for key, values in years.items|sort %}
-    <ul style="float:left">
-      <li class="year">
-        {{key}}
-        {% if forloop.last %}
-          <a id="add-payment" href="#">Add Payment</a>
-        {% endif %}
+      {% for key, values in years.items|sort %}
+      <li class="payment-container">
+        <ul class="current-years" style="float:left">
+          <li class="year">
+            {{key}}
+            {% if forloop.last %}
+              <a id="add-payment" href="#">Add Payment</a>
+            {% endif %}
+          </li>
+
+          {% for value in values.payments %}
+            <li class='payment'>
+              {{value.date}}: {{value.amount}}
+            </li>
+          {% endfor %}
+
+          <li class='yearly-summary'>
+            <div class='annual-fee' style="float:bottom">
+              Fees: {{values.annual_fee}}
+            </div>
+            <div class='total-paid' style="float:bottom">
+              Paid: {{values.paid}}
+            </div>
+            {% if forloop.last %}
+              <div class='current-remaining-balance'>
+                Balance: {{balance}}
+              </div>
+            {% endif %}
+          </li>
+        </ul>
       </li>
-      {% for value in values.payments %}
-      <li>
-        {{value.date}}: {{value.amount}}
-      </li>
+
       {% endfor %}
-      <li class='annual-fee' style="float:bottom">
-        Annual Fee: {{values.annual_fee}}
-      </li>
-      <li class='total-paid' style="float:bottom">
-        Total Paid: {{values.paid}}
-      </li>
-    </ul>
-    {% endfor %}
 
-    <button id="save-payment" style="position:absolute;bottom:20px;right:40px">Save Payment</button>
+      <button id="save-payment" style="position:absolute;bottom:20px;right:40px">Save Payment</button>
+    </div>
 <script>
     function getCookie(name) {
         var cookieValue = null;
@@ -64,7 +84,7 @@
     $("#add-payment").click(function(event){
       if (!adding_payment) {
           currently_adding = $(event.target).parent().parent();
-          $(event.target).parent().parent().find('.annual-fee').prepend("<li id='payment-input'>Amount: <input type='text'/></li>");
+          currently_adding.append("<li id='payment-input'>Amount: <input type='text'/></li>");
           adding_payment = true;
       }
     });
@@ -80,7 +100,7 @@
 
     $("#save-payment").click(function(event) {
         new_payment_value = $('#payment-input input').val();
-        $('#payment-input').replaceWith("<li>"+now_str+": "+new_payment_value+"</li>");
+        $('#payment-input').replaceWith("<li class='payment'>"+now_str+": "+new_payment_value+"</li>");
 
         $.ajax({
           // how do i use url tag?
@@ -97,8 +117,16 @@
             new_balance = $('#facility-balance').html().match(/\d+/) - new_payment_value;
             new_total_paid = parseInt(currently_adding.find('.total-paid').html().match(/\d+/)) + parseInt(new_payment_value);
 
+            // update balance at top of modal
             $('#facility-balance').html("Outstanding Balance: TZS " + new_balance);
-            currently_adding.find('.total-paid').html("Total Paid: " + new_total_paid);
+
+            // update balance at bottom of modal
+            $('.current-remaining-balance').html("Balance: " + new_balance);
+
+            // update total paid
+            currently_adding.find('.total-paid').html("Paid: " + new_total_paid);
+
+            $("a[data-id='" + {{ facility_id }} + "']").html(new_balance);
 
             $("#add-payment").hide();
             $("#save-payment").hide();

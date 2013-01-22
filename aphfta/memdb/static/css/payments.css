@@ -1,0 +1,75 @@
+.year {
+  font-size: 17px;
+  margin-bottom: 10px;
+}
+
+.current-years li {
+  width: 185px;
+}
+
+#past-years {
+  width: 185px;
+}
+
+#payment-list {
+  margin-top: 20px;
+}
+
+#payment-list li {
+  list-style: none;
+}
+
+.total-fees {
+}
+
+.total-paid {
+}
+
+.remaining-balance {
+}
+
+ul {
+  -webkit-margin-before: 0em;
+  -webkit-margin-after: 0em;
+  -webkit-margin-start: 0px;
+  -webkit-margin-end: 0px;
+  -webkit-padding-start: 0px;
+}
+
+.payment {
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.yearly-summary {
+  position: absolute;
+  top: 400px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.yearly-summary div {
+  padding-bottom: 5px;
+}
+
+#add-payment {
+  font-size: 10px;
+}
+
+.summary {
+  font-size: 17px;
+  position: absolute;
+  bottom: 20px;
+}
+
+.annual-fee {
+  font-size: inherit;
+}
+
+.total-paid {
+  font-size: inherit;
+}
+
+.payment-container {
+  list-style: none;
+}
