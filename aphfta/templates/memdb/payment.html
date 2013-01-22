@@ -137,33 +137,28 @@
         });
     });
 
-    $('.btn.left').click(function(){
+    function switchInterval(amount) {
       $.ajax({
         // how do i use url tag?
         url: "/members/payments/" + id,
         data: {
-          interval: {{ interval }} + 1
+          interval: {{ interval }} + amount
         },
         success: function(results) {
           $('#balance-modal').html(results);
         }
       });
-    });
+    }
 
-    $('.btn.right').click(function(){
-      $.ajax({
-        // how do i use url tag?
-        url: "/members/payments/" + id,
-        data: {
-          interval: {{interval}} - 1
-        },
-        success: function(results) {
-          $('#balance-modal').html(results);
-        }
-      });
-    });
+    function switchIntervalLeft() {
+      switchInterval(1)
+    }
+    function switchIntervalRight() {
+      switchInterval(-1)
+    }
 
-
+    $('.btn.left').click(switchIntervalLeft);
+    $('.btn.right').click(switchIntervalRight);
 
 </script>
 </div>
