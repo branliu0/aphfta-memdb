@@ -91,7 +91,6 @@ def payment(request, id=None):
     past_years["total_paid"] = old_payment_total
     past_years["balance_remaining"] = old_fees_total - old_payment_total
 
-    print past_years
     for payment in recent_payments:
         year = str(payment.date.year)
         years[year]['payments'].append({"date": payment.date, "amount": payment.amount})
@@ -109,7 +108,10 @@ def payment(request, id=None):
     return render(request, 'memdb/payment.html', context)
 
 def add_payment(request, facility_id=None):
-    print request.POST
+    '''
+      Handles POST request from payment modal to create new payments.
+    '''
+
     if not request.POST['date']:
         return HttpResponse("error: missing date")
     if not request.POST['amount']:
@@ -121,18 +123,23 @@ def add_payment(request, facility_id=None):
         return HttpResponse("error: need only date and amount")
 
     args['facility_id'] = facility_id
-    new_payment = Payment(**args)
-    facility = Facility.objects.get(id=facility_id)
-    facility.save()
 
+    new_payment = Payment(**args)
     new_payment.save();
     return HttpResponse("success")
 
-def region(request, region='Dar'):
-    facilities = Facility.objects.filter(region=region)
-    exclude_facilities = Facility.objects.exclude(region=region)
-    facility_names = map(lambda x: { 'id': x.id, 'name': x.facility_name }, facilities)
-    exclude_facility_names = map(lambda x: { 'id': x.id, 'name': x.facility_name }, exclude_facilities)
-    all_facilities = {'include': facility_names, 'exclude': exclude_facility_names}
+def region(request, region=''):
+    '''
+      When creating a new fee, the user may want to apply the fee to all
+      facilities in a region. This function returns just that.
+    '''
 
+    # return set of all facilities in region, and compliment of set
+    include_facilities = Facility.objects.filter(region=region)
+    exclude_facilities = Facility.objects.exclude(region=region)
+
+    include_facility_names = map(lambda x: { 'id': x.id, 'name': x.facility_name }, include_facilities)
+    exclude_facility_names = map(lambda x: { 'id': x.id, 'name': x.facility_name }, exclude_facilities)
+
+    all_facilities = {'include': include_facility_names, 'exclude': exclude_facility_names}
     return HttpResponse(json.dumps(all_facilities))
