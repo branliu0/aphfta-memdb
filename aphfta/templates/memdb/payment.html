@@ -83,13 +83,9 @@
     }
     var csrftoken = getCookie('csrftoken');
 
-    adding_payment = false
     $("#add-payment").click(function(event){
-      if (!adding_payment) {
-          currently_adding = $(event.target).parent().parent();
-          currently_adding.append("<li id='payment-input'>Amount: <input type='text'/></li>");
-          adding_payment = true;
-      }
+        currently_adding = $(event.target).parent().parent();
+        currently_adding.append("<li id='payment-input'>Amount: <input type='text'/></li>");
     });
 
     var month_names = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -130,9 +126,6 @@
             currently_adding.find('.total-paid').html("Paid: " + new_total_paid);
 
             $("a[data-id='" + {{ facility_id }} + "']").html(new_balance);
-
-            $("#add-payment").hide();
-            $("#save-payment").hide();
           },
           error: function(results) {
               $('#balance-modal').html("There was an error, try again later.");
