@@ -69,6 +69,7 @@ class PaymentAdmin(admin.ModelAdmin):
   list_display = ('facility', 'date', 'amount')
   search_display = ('facility', 'date', 'amount')
 
+
 admin.site.register(Facility, FacilityAdmin)
 admin.site.register(Fee, FeeAdmin)
 admin.site.register(Payment, PaymentAdmin)

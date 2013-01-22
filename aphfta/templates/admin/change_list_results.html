@@ -55,6 +55,9 @@
     $.ajax({
       // how do i use url tag?
       url: "/members/payments/" + id,
+      data: {
+        interval: 1
+      },
       success: function(results) {
         $('#balance-modal').html(results);
       }

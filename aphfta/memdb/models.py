@@ -117,7 +117,6 @@ class Facility(models.Model):
 
   class Meta:
     app_label = model_helpers.string_with_title("memdb", "Facility Information")
-#    verbose_name = u'Facility'
     verbose_name_plural = 'facilities'
 
 class Payment(models.Model):

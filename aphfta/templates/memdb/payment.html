@@ -4,6 +4,9 @@
     <h2 id="facility-balance">Outstanding Balance: TZS {{balance}}</h2>
     <h2 id="facility-region">Region: {{region}}</h2>
 
+    <div class="btn right"><span class="icon right"></span></div>
+    <div class="btn left"><span class="icon left"></span></button>
+
     <div id="payment-list">
       <li class="payment-container">
         <div>
@@ -50,9 +53,11 @@
               Paid: {{values.paid}}
             </div>
             {% if forloop.last %}
-              <div class='current-remaining-balance'>
-                Balance: {{balance}}
-              </div>
+              {% if interval == 1 %}
+                <div class='current-remaining-balance'>
+                  Balance: {{balance}}
+                </div>
+              {% endif %}
             {% endif %}
           </li>
         </ul>
@@ -80,13 +85,9 @@
     }
     var csrftoken = getCookie('csrftoken');
 
-    adding_payment = false
     $("#add-payment").click(function(event){
-      if (!adding_payment) {
-          currently_adding = $(event.target).parent().parent();
-          currently_adding.append("<li id='payment-input'>Amount: <input type='text'/></li>");
-          adding_payment = true;
-      }
+        currently_adding = $(event.target).parent().parent();
+        currently_adding.append("<li id='payment-input'>Amount: <input type='text'/></li>");
     });
 
     var month_names = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -127,15 +128,40 @@
             currently_adding.find('.total-paid').html("Paid: " + new_total_paid);
 
             $("a[data-id='" + {{ facility_id }} + "']").html(new_balance);
-
-            $("#add-payment").hide();
-            $("#save-payment").hide();
           },
           error: function(results) {
               $('#balance-modal').html("There was an error, try again later.");
           }
         });
     });
+
+    $('.btn.left').click(function(){
+      $.ajax({
+        // how do i use url tag?
+        url: "/members/payments/" + id,
+        data: {
+          interval: {{ interval }} + 1
+        },
+        success: function(results) {
+          $('#balance-modal').html(results);
+        }
+      });
+    });
+
+    $('.btn.right').click(function(){
+      $.ajax({
+        // how do i use url tag?
+        url: "/members/payments/" + id,
+        data: {
+          interval: {{interval}} - 1
+        },
+        success: function(results) {
+          $('#balance-modal').html(results);
+        }
+      });
+    });
+
+
 
 </script>
 </div>

@@ -7,6 +7,7 @@ from memdb.models import Facility
 from memdb.models import Payment
 from memdb.models import Fee
 from memdb.forms import FacilityForm
+from django.db.models import Sum
 import datetime
 import json
 
@@ -57,7 +58,10 @@ def update(request, id=None):
   return render(request, 'memdb/clinicForm.html', context)
 
 def payment(request, id=None):
-    history_range = 3
+    interval = int(request.GET.get("interval", 1))
+
+    range_start = 3 * interval
+    range_end = 3 * (interval - 1)
 
     facility = get_object_or_404(Facility, id=id)
     # error checking
@@ -65,20 +69,24 @@ def payment(request, id=None):
     region = facility.region
 
     now = datetime.datetime.now()
-    past_year = now.year - history_range + 1;
+    start_year = now.year - range_start + 1
+    end_year = now.year - range_end
+
+    print start_year
+    print end_year
 
     years = {}
-    for year in range(past_year, now.year+1):
+    for year in range(start_year, end_year+1):
         years[str(year)] = {'annual_fee': 0, 'paid': 0, 'payments': [] }
 
     past_years = {}
 
-    recent_fees = Fee.objects.filter(facility=id, year__gte=str(past_year))
-    old_fees  = Fee.objects.filter(facility=id, year__lt=str(past_year))
+    recent_fees = Fee.objects.filter(facility=id, year__range=(start_year,end_year))
+    old_fees  = Fee.objects.filter(facility=id, year__lt=str(start_year))
 
-    recent_payments = Payment.objects.filter(facility_id=id, date__range=[str(past_year)+"-01-01", now.strftime("%Y-%m-%d")]) \
+    recent_payments = Payment.objects.filter(facility_id=id, date__range=[str(start_year)+"-01-01", str(end_year)+"-12-31"]) \
                               .order_by('date')
-    old_payments = Payment.objects.filter(facility_id=id, date__lt=str(past_year)+"-01-01") \
+    old_payments = Payment.objects.filter(facility_id=id, date__lt=str(start_year)+"-01-01") \
                               .values('amount')
 
     old_fees_total = sum(map(lambda x: x.amount, old_fees))
@@ -91,7 +99,6 @@ def payment(request, id=None):
     past_years["total_paid"] = old_payment_total
     past_years["balance_remaining"] = old_fees_total - old_payment_total
 
-    print past_years
     for payment in recent_payments:
         year = str(payment.date.year)
         years[year]['payments'].append({"date": payment.date, "amount": payment.amount})
@@ -101,15 +108,23 @@ def payment(request, id=None):
         year = str(fee.year)
         years[year]['annual_fee'] += fee.amount
 
-    balance = (old_fees_total + recent_fees_total) - (old_payment_total + recent_payment_total)
+    recent_payments = Payment.objects.filter(facility_id=id, date__range=[str(start_year)+"-01-01", str(end_year)+"-12-31"]) \
+                              .order_by('date')
+
+    total_fees = Fee.objects.filter(facility=id).aggregate(Sum('amount'))
+    total_payments = Payment.objects.filter(facility_id=id).aggregate(Sum('amount'))
+    balance = total_fees["amount__sum"] - total_payments["amount__sum"]
 
     context = Context({"facility_name": name, "balance": balance, "region": region, "years": years, \
-                       "past_years": past_years, "facility_id": id})
+                       "past_years": past_years, "facility_id": id, "interval": interval})
 
     return render(request, 'memdb/payment.html', context)
 
 def add_payment(request, facility_id=None):
-    print request.POST
+    '''
+      Handles POST request from payment modal to create new payments.
+    '''
+
     if not request.POST['date']:
         return HttpResponse("error: missing date")
     if not request.POST['amount']:
@@ -121,18 +136,23 @@ def add_payment(request, facility_id=None):
         return HttpResponse("error: need only date and amount")
 
     args['facility_id'] = facility_id
-    new_payment = Payment(**args)
-    facility = Facility.objects.get(id=facility_id)
-    facility.save()
 
+    new_payment = Payment(**args)
     new_payment.save();
     return HttpResponse("success")
 
-def region(request, region='Dar'):
-    facilities = Facility.objects.filter(region=region)
-    exclude_facilities = Facility.objects.exclude(region=region)
-    facility_names = map(lambda x: { 'id': x.id, 'name': x.facility_name }, facilities)
-    exclude_facility_names = map(lambda x: { 'id': x.id, 'name': x.facility_name }, exclude_facilities)
-    all_facilities = {'include': facility_names, 'exclude': exclude_facility_names}
+def region(request, region=''):
+    '''
+      When creating a new fee, the user may want to apply the fee to all
+      facilities in a region. This function returns just that.
+    '''
 
+    # return set of all facilities in region, and compliment of set
+    include_facilities = Facility.objects.filter(region=region)
+    exclude_facilities = Facility.objects.exclude(region=region)
+
+    include_facility_names = map(lambda x: { 'id': x.id, 'name': x.facility_name }, include_facilities)
+    exclude_facility_names = map(lambda x: { 'id': x.id, 'name': x.facility_name }, exclude_facilities)
+
+    all_facilities = {'include': include_facility_names, 'exclude': exclude_facility_names}
     return HttpResponse(json.dumps(all_facilities))

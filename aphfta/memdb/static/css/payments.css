@@ -4,10 +4,14 @@
 }
 
 .current-years li {
-  width: 185px;
+  width: 140px;
+  overflow: visible;
+  margin-left: 2px;
+  margin-right: 2px;
 }
 
 #past-years {
+  margin-right: 15px;
   width: 185px;
 }
 
@@ -73,3 +77,27 @@ ul {
 .payment-container {
   list-style: none;
 }
+
+.btn span.icon {
+  position: absolute;
+  top: 230px;
+  background: url("/static/img/arrow-right.png") no-repeat;
+  float: right;
+  width: 26px;
+  height: 26px;
+}
+
+.btn span.icon.right{
+  right: 25px;
+}
+
+.btn span.icon.left {
+    float: left;
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}
+
