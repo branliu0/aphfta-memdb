@@ -110,6 +110,11 @@ def payment(request, id=None):
 
     total_fees = Fee.objects.filter(facility=id, year__lte=now.year).aggregate(Sum('amount'))
     total_payments = Payment.objects.filter(facility_id=id, date__lte=str(now.year)+"-12-31").aggregate(Sum('amount'))
+    if not total_fees["amount__sum"]:
+      total_fees["amount__sum"] = 0
+    if not total_payments["amount__sum"]:
+      total_payments["amount__sum"] = 0
+
     balance = total_fees["amount__sum"] - total_payments["amount__sum"]
 
     context = Context({"facility_name": name, "balance": balance, "region": region, "years": years, \
