@@ -35,4 +35,4 @@ class ProgramAdmin(admin.ModelAdmin):
   list_display = ('name', 'description')
 
 admin.site.register(Facility, FacilityAdmin)
-admin.site.register(Program)
+admin.site.register(Program, ProgramAdmin)
