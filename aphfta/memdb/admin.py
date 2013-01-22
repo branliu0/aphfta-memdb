@@ -29,10 +29,10 @@ class FacilityAdmin(admin.ModelAdmin):
   edit_balance.allow_tags = True
 
 class FeeAdmin(admin.ModelAdmin):
-  list_display = ('name', 'year', 'type', 'amount')
-  search_fields = ('name', 'year', 'type', 'amount')
+  list_display = ('type', 'year', 'amount')
+  search_fields = ('type', 'year', 'amount')
 
-  filter_horizontal = ("facility",)
+  filter_horizontal = ('facility',)
 
   '''
     This was originally meant for when you you could either add all regions in a clinic, or add individual clinics,
