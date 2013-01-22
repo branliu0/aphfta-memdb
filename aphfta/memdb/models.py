@@ -128,11 +128,11 @@ class Payment(models.Model):
     return str(self.facility) + ': ' + str(self.amount)
 
 class Fee(models.Model):
-  name = models.CharField('Name', max_length = 250, blank=True)
+  type = models.CharField('Fee Type', max_length=250)
   year = models.IntegerField()
-  type = models.CharField('Fee Type', max_length = 250, blank=True)
+  description = models.TextField(blank=True)
   amount = amount = models.IntegerField()
-  facility = models.ManyToManyField(Facility, blank=True)
+  facility = models.ManyToManyField(Facility)
 
   def __unicode__(self):
-    return str(self.year) + " " + str(type)
+    return "%s %d" % (self.type, self.year)
