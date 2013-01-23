@@ -1,6 +1,8 @@
-import operator as op
 from django import forms
 from django.contrib import admin
+from django.contrib.admin.widgets import FilteredSelectMultiple
+from django.contrib.auth.admin import GroupAdmin
+from django.contrib.auth.models import User, Group
 from models import Facility, Program
 from helpers.admin_filters import SelectFilter, BooleanSelectFilter, M2MSelectFilter
 
@@ -47,7 +49,7 @@ class ProgramAdminForm(forms.ModelForm):
   facilities = forms.ModelMultipleChoiceField(
       queryset=Facility.objects.all(),
       required=False,
-      widget=admin.widgets.FilteredSelectMultiple(
+      widget=FilteredSelectMultiple(
           verbose_name='Facilities',
           is_stacked=False))
 
@@ -55,15 +57,13 @@ class ProgramAdminForm(forms.ModelForm):
     super(ProgramAdminForm, self).__init__(*args, **kwargs)
 
     if self.instance and self.instance.pk:
-      facilities = self.instance.facilities.all()
-      self.fields['facilities'].initial = \
-          sorted(facilities, key=op.attrgetter('facility_name'))
+      self.fields['facilities'].initial = self.instance.facilities.all()
 
   def save(self, commit=True):
     program = super(ProgramAdminForm, self).save(commit=False)
 
     if commit:
-      topping.save()
+      program.save()
 
     if program.pk:
       program.facilities = self.cleaned_data['facilities']
@@ -80,5 +80,39 @@ class ProgramAdmin(admin.ModelAdmin):
   form = ProgramAdminForm
 
 
+class GroupAdminForm(forms.ModelForm):
+  users = forms.ModelMultipleChoiceField(
+      queryset=User.objects.all(),
+      required=False,
+      widget=FilteredSelectMultiple(
+          verbose_name='Users',
+          is_stacked=False))
+
+  def __init__(self, *args, **kwargs):
+    super(GroupAdminForm, self).__init__(*args, **kwargs)
+
+    if self.instance and self.instance.pk:
+      self.fields['users'].initial = self.instance.user_set.all()
+
+  def save(self, commit=True):
+    group = super(GroupAdminForm, self).save(commit=False)
+
+    if commit:
+      group.save()
+
+    if group.pk:
+      group.user_set = self.cleaned_data['users']
+      self.save_m2m()
+
+    return group
+
+  class Meta:
+    model = Group
+
+class MyGroupAdmin(GroupAdmin):
+  form = GroupAdminForm
+
 admin.site.register(Facility, FacilityAdmin)
 admin.site.register(Program, ProgramAdmin)
+admin.site.unregister(Group)
+admin.site.register(Group, MyGroupAdmin)
