@@ -32,7 +32,7 @@ class Facility(models.Model):
   email2 = models.EmailField('Email 2', blank=True)
   email3 = models.EmailField('Email 3', blank=True)
 
-  programs = models.ManyToManyField(Program, blank=True)
+  programs = models.ManyToManyField(Program, blank=True, related_name='facilities')
 
   moh_reg_cert = models.IntegerField('MOH Facility Registration Certificate No.', blank=True, null=True)
   FACILITY_TYPE = (
@@ -138,3 +138,4 @@ class Facility(models.Model):
     app_label = model_helpers.string_with_title("memdb", "Facility Information")
 #    verbose_name = u'Facility'
     verbose_name_plural = 'facilities'
+    ordering = ['facility_name']
