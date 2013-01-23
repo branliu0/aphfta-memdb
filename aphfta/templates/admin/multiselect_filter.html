@@ -1,0 +1,30 @@
+{% load i18n %}
+<h3>{% blocktrans with filter_title=title %} By {{ filter_title }} {% endblocktrans %}</h3>
+<select id="select_filter_{{ title|slugify }}" style="margin-left: 10px;" multiple="multiple" data-base-href="{{ choices.0.base_query_string}}" data-param="{{ spec.parameter_name }}">
+{% for choice in choices %}
+  <option{% if choice.selected %} selected="selected"{% endif %} data-href="{{ choice.query_string|iriencode }}" data-value="{{ choice.value }}">
+    {{ choice.display }}
+  </option>
+{% endfor %}
+</select>
+<a id="{{ title|slugify }}_search" href="#">Search</a>
+
+<script type="text/javascript">
+  // Automatically navigate to the new query URL on select
+  $(function() {
+    var $select = $("select#select_filter_{{ title|slugify }}");
+    $("a#{{ title|slugify }}_search").click(function(e) {
+      e.preventDefault()
+      var baseUrl = $select.data("base-href");
+      var param = $select.data("param");
+      var selectedOptions = $select.find("option:selected");
+      var values = selectedOptions.map(function(_, s) {
+        return $(s).data("value");
+      });
+      var url = baseUrl + "&" +
+                param + "=" + encodeURIComponent($.makeArray(values).join(","));
+      console.log(window.location.pathname + url);
+      window.location = window.location.pathname + url;
+    });
+  });
+</script>

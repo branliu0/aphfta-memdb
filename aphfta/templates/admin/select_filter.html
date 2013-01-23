@@ -10,12 +10,48 @@
 
 <script type="text/javascript">
   // Automatically navigate to the new query URL on select
-  (function($) {
-    $(function() {
-      $("select#select_filter_{{ filter_title|slugify }}").change(function(e) {
-        window.location = window.location.pathname +
-            $(this).find("option:selected").attr("data-href");
-      });
+  $(function() {
+    $("select#select_filter_{{ title|slugify }}").chosen().change(function(e) {
+      window.location = window.location.pathname +
+          $(this).find("option:selected").attr("data-href");
     });
-   })(django.jQuery);
+  });
 </script>
+
+<style type="text/css">
+  /*
+   * The Django admin CSS selectors bind stronger than the Chosen CSS selectors,
+   * so I have to copy over a few of the CSS selectors to get the styling to look good.
+   * I added a few of my own styles too, to make it look better.
+   *
+   * In particular, add some styles such that the value of the options break into
+   * multiple lines, and the chosen selector doesn't extend off of the side filter bar.
+   * I hard-code the widths here because the django admin filter sidebar width is also
+   * hard-coded to 160px.
+   */
+  #select_filter_{{ title|slugify }} + .chzn-container {
+    margin-top: 4px;
+    margin-left: 10px;
+    max-width: 140px;
+  }
+  #select_filter_{{ title|slugify }} + .chzn-container .chzn-drop {
+    max-width: 138px;
+  }
+  #select_filter_{{ title|slugify }} + .chzn-container .chzn-drop .chzn-search input {
+    max-width: 108px;
+  }
+  #select_filter_{{ title|slugify }} + .chzn-container .chzn-results {
+    padding-left: 4px;
+    margin: 0 4px 4px 0;
+  }
+  #select_filter_{{ title|slugify }} + .chzn-container .chzn-results li {
+    padding: 5px 6px;
+    border-bottom: 1px solid #EEE;
+  }
+  #select_filter_{{ title|slugify }} + .chzn-container .chzn-results li:last-child {
+    border-bottom: none;
+  }
+  #select_filter_{{ title|slugify }} + .chzn-container-single .chzn-single span {
+    overflow: visible;
+  }
+</style>

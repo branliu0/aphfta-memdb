@@ -94,8 +94,11 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
-    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
+
+INTERNAL_IPS = ('127.0.0.1',)
 
 ROOT_URLCONF = 'aphfta.urls'
 
@@ -119,6 +122,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'memdb',
     'report_builder',
+    'debug_toolbar',
 )
 
 # A sample logging configuration. The only tangible logging

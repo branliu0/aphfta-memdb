@@ -1,14 +1,34 @@
+import operator as op
+
 from django.db import models
 from helpers import model_helpers
 from django.db.models import Sum
+from collections import defaultdict
 
-# Create your models here.
+class Program(models.Model):
+  name = models.CharField(max_length=100)
+  description = models.TextField(blank=True)
+
+  def __unicode__(self):
+    return self.name
+
 class Facility(models.Model):
+  @classmethod
+  def getBalance(cls,facility_id):
+    return cls.fees.get(facility_id,0) - cls.payments.get(facility_id,0)
+
   facility_name = models.CharField('Facility Name', max_length=200)
   date_joined = models.DateField(auto_now_add=True, null=True)
   address = models.CharField('Address', max_length=250, blank=True)
   district = models.CharField('District', max_length=250, blank=True)
   region = models.CharField('Region', max_length=250, blank=True)
+  ZONES = (
+      ("NZ", "Northern Zone"),
+      ("CZ", "Coastal Zone"),
+      ("LZ", "Lake Zone"),
+      ("SZ", "Southern Zone")
+  )
+  zone = models.CharField(max_length=2, blank=True, choices=ZONES)
   tel_office = models.CharField('Tel No. Office', max_length=250, blank=True)
   tel_office2 = models.CharField('Tel No. Office 2', max_length=250, blank=True)
   tel_office3 = models.CharField('Tel No. Office 3', max_length=250, blank=True)
@@ -17,6 +37,9 @@ class Facility(models.Model):
   email = models.EmailField('Email', blank=True)
   email2 = models.EmailField('Email 2', blank=True)
   email3 = models.EmailField('Email 3', blank=True)
+
+  programs = models.ManyToManyField(Program, blank=True)
+
   moh_reg_cert = models.IntegerField('MOH Facility Registration Certificate No.', blank=True, null=True)
   FACILITY_TYPE = (
          ("VO", 'Vountary Agency'),
@@ -101,9 +124,7 @@ class Facility(models.Model):
 
   def balance(self):
     fees = Fee.objects.filter(facility=self.id).aggregate(Sum('amount'))
-    print fees
     payments = Payment.objects.filter(facility=self.id).aggregate(Sum('amount'))
-    print payments
 
     if fees['amount__sum'] == None:
       fees['amount__sum'] = 0
@@ -111,6 +132,10 @@ class Facility(models.Model):
       payments['amount__sum'] = 0
 
     return fees['amount__sum'] - payments['amount__sum']
+
+  def programs_list(self):
+    return ",".join(map(op.itemgetter(0), self.programs.values_list('name'))) \
+        or "None"
 
   def __unicode__(self):
     return self.facility_name
@@ -124,6 +149,11 @@ class Payment(models.Model):
   date = models.DateField()
   amount = models.IntegerField()
 
+  # update the Facility payments static variable
+  def save(self, *args, **kwargs):
+      Facility.payments[self.facility.id] += amount
+      super(Payment, self).save(*args, **kwargs)
+
   def __unicode__(self):
     return str(self.facility) + ': ' + str(self.amount)
 
@@ -136,3 +166,8 @@ class Fee(models.Model):
 
   def __unicode__(self):
     return "%s %d" % (self.type, self.year)
+
+Facility.fees = defaultdict(int, {x["facility"]: x["fee"] for x in \
+                            Fee.objects.annotate(fee=Sum('amount')).values('facility', 'fee')})
+Facility.payments = defaultdict(int, {x["facility_id"]: x["payment"] for x in \
+                                Payment.objects.annotate(payment=Sum('amount')).values('facility_id', 'payment')})

@@ -1,15 +1,17 @@
+#!/usr/bin/env python
+
 import csv
 import json
 
-#	Facility Name
-# Facility Owner
-# Telephone Number
-#	Email
-# Region
-# District / Location
-# Type
-# Membership
-
+# 0. Facility Name
+# 1. Facility Owner
+# 2. Telephone Number
+# 3. Email
+# 4. Region
+# 5. District / Location
+# 6. Type
+# 7. Membership
+# 8. Zone
 
 def run():
   facilities = []
@@ -45,16 +47,17 @@ def run():
     fields["region"] = row[4]
     fields["district"] = row[5]
     fields["membership_type"] = row[6]
-    fields["balance"] = 10000
 
     membership = row[7].lower()
     fields["membership"] = (membership != "no")
 
+    fields["zone"] = row[8]
+
     facilities.append({"pk": pk, "model": "memdb.facility", "fields": fields})
     pk += 1
 
-  outfile = open("2012_aphfta_facilities_final.json", "w")
-  outfile.write(json.dumps(facilities))
+  outfile = open("2013-01-16_facilities_with_zones.json", "w")
+  outfile.write(json.dumps(facilities, indent=2))
 
 if __name__ == "__main__":
   run()
