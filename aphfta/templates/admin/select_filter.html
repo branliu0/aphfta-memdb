@@ -11,7 +11,9 @@
 <script type="text/javascript">
   // Automatically navigate to the new query URL on select
   $(function() {
-    $("select#select_filter_{{ title|slugify }}").chosen().change(function(e) {
+    $("select#select_filter_{{ title|slugify }}").chosen({
+      disable_search: {{ spec.disable_search|yesno:"true,false"}}
+    }).change(function(e) {
       window.location = window.location.pathname +
           $(this).find("option:selected").attr("data-href");
     });
@@ -20,21 +22,32 @@
 
 <style type="text/css">
   /*
-   * The Django admin CSS selectors bind stronger than the Chosen CSS selectors,
-   * so I have to copy over a few of the CSS selectors to get the styling to look good.
-   * I added a few of my own styles too, to make it look better.
-   *
-   * In particular, add some styles such that the value of the options break into
-   * multiple lines, and the chosen selector doesn't extend off of the side filter bar.
-   * I hard-code the widths here because the django admin filter sidebar width is also
-   * hard-coded to 160px.
+   The Django admin CSS selectors bind stronger than the Chosen CSS selectors,
+   so I have to copy over a few of the CSS selectors to get the styling to
+   look good.  I added a few of my own styles too, to make it look better.
+
+   In particular, add some styles such that the value of the options break
+   into multiple lines, and the chosen selector doesn't extend off of the side
+   filter bar.  It's okay to hard-code the widths here because the django
+   admin filter sidebar width is also * hard-coded to 160px.
+
+   Also add a min-width, so that there is always a decently big target box for
+   clicking.
+
    */
   #select_filter_{{ title|slugify }} + .chzn-container {
     margin-top: 4px;
     margin-left: 10px;
     max-width: 140px;
   }
+  #select_filter_{{ title|slugify }} + .chzn-container .chzn-single {
+    min-width: 70px;
+  }
+  #select_filter_{{ title|slugify }} + .chzn-container .chzn-single span {
+    overflow: visible;
+  }
   #select_filter_{{ title|slugify }} + .chzn-container .chzn-drop {
+    min-width: 78px;
     max-width: 138px;
   }
   #select_filter_{{ title|slugify }} + .chzn-container .chzn-drop .chzn-search input {
@@ -50,8 +63,5 @@
   }
   #select_filter_{{ title|slugify }} + .chzn-container .chzn-results li:last-child {
     border-bottom: none;
-  }
-  #select_filter_{{ title|slugify }} + .chzn-container-single .chzn-single span {
-    overflow: visible;
   }
 </style>

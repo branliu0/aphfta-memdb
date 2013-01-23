@@ -25,9 +25,10 @@ class SelectFilterBase(admin.SimpleListFilter):
 # Generates a SelectFilter class for the given field. Nearly identical to the
 # default Django filter, except that it uses a HTML select rather than an
 # unordered list.
-def SelectFilter(field):
+def SelectFilter(field, search_disabled=False):
   class SelectFilter(SelectFilterBase):
     field_name = field
+    disable_search = search_disabled
 
     def queryset(self, request, qs):
       if self.value():
@@ -61,6 +62,7 @@ def SelectFilter(field):
 def BooleanSelectFilter(field):
   class SelectFilter(SelectFilterBase):
     field_name = field
+    disable_search = True # Always disable search, since there are so few choices
 
     def queryset(self, request, qs):
       if self.value():
@@ -113,10 +115,11 @@ def MultiselectFilter(field):
 
   return MultiselectFilter
 
-def M2MSelectFilter(field, foreign_display_field):
+def M2MSelectFilter(field, foreign_display_field, search_disabled=False):
   SelectFilterClass = SelectFilter(field)
 
   class M2MSelectFilter(SelectFilterClass):
+    disable_search = search_disabled
 
     def __init__(self, request, params, model, model_admin):
       try:

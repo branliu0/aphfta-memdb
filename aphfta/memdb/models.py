@@ -48,7 +48,7 @@ class Facility(models.Model):
   email2 = models.EmailField('Email 2', blank=True)
   email3 = models.EmailField('Email 3', blank=True)
 
-  programs = models.ManyToManyField(Program, blank=True)
+  programs = models.ManyToManyField(Program, blank=True, related_name='facilities')
 
   moh_reg_cert = models.IntegerField('MOH Facility Registration Certificate No.', blank=True, null=True)
   FACILITY_TYPE = (
@@ -144,8 +144,19 @@ class Facility(models.Model):
     return fees['amount__sum'] - payments['amount__sum']
 
   def programs_list(self):
-    return ",".join(map(op.itemgetter(0), self.programs.values_list('name'))) \
+    # Note: It is important to use programs.all() rather than
+    # programs.values_list('name') or similar, or else you will always
+    # make a new query, rather than possibly loading the data from cache
+    # due to a prefetch query.
+    return ",".join(map(op.attrgetter('name'), self.programs.all())) \
         or "None"
+
+  def completeness(self):
+    fields = self._meta.fields
+    percent = len(filter(lambda field: getattr(self, field.attname), fields)) / \
+        float(len(fields))
+    return "%d%%" % int(100 * percent)
+  completeness.short_description = 'Data Completeness'
 
   def __unicode__(self):
     return self.facility_name
@@ -153,6 +164,7 @@ class Facility(models.Model):
   class Meta:
     app_label = model_helpers.string_with_title("memdb", "Facility Information")
     verbose_name_plural = 'facilities'
+    ordering = ['facility_name']
 
 class Payment(models.Model):
   facility = models.ForeignKey(Facility)
