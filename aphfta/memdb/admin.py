@@ -4,16 +4,6 @@ from django.db.models import Sum
 from helpers.admin_filters import SelectFilter, BooleanSelectFilter, M2MSelectFilter
 
 class FacilityAdmin(admin.ModelAdmin):
-  '''
-  def __init__(self):
-    fees = Fee.objects.annotate(fee=Sum('amount')).values('id', 'fee')
-    payments = Payment.objects.annotate(payment=Sum('amount')).values('id', 'payment')
-
-    self.fees = fees
-    self.payments = payments
-  '''
-
-
   list_display = ('facility_name', 'doctor_ic', 'full_contact', 'address', 'region', \
                   'district', 'zone', 'programs_list', 'membership', 'edit_balance')
   search_fields = ('facility_name', 'doctor_ic', 'tel_office', 'moh_reg_cert', 'email')
@@ -57,6 +47,7 @@ class FeeAdmin(admin.ModelAdmin):
 
   filter_horizontal = ('facility',)
 
+  # when saving a fee from admin interface update Facility static fee dict
   def save_related(self, request, form, formsets, change):
     super(FeeAdmin,self).save_related(request, form, formsets, change)
     Facility.updateBalance()
@@ -94,7 +85,7 @@ class FeeAdmin(admin.ModelAdmin):
 
 class PaymentAdmin(admin.ModelAdmin):
   list_display = ('facility', 'date', 'amount')
-  search_display = ('facility', 'date', 'amount')
+  search_fields = ('facility',)
 
 class ProgramAdmin(admin.ModelAdmin):
   list_display = ('name', 'description')
