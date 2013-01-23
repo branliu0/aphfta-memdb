@@ -36,9 +36,11 @@ class FacilityAdmin(admin.ModelAdmin):
   ordering = ('facility_name',)
 
   def edit_balance(self, obj):
-    if obj.getBalance(obj.id) == 0:
-        return '<a class="paid balance" data-id="{0}" href="#">Paid</a>'.format(obj.id)
-    return '<a class="balance" data-id="{0}" href="#">{1}</a>'.format(obj.id, obj.getBalance(obj.id))
+    id = obj.id
+    balance = obj.getBalance(obj.id)
+    if balance == 0:
+        return '<a class="paid balance" data-id="{0}" href="#">Paid</a>'.format(id)
+    return '<a class="balance" data-id="{0}" href="#">{1}</a>'.format(id, balance)
   edit_balance.allow_tags = True
 
 

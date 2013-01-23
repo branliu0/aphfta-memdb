@@ -15,7 +15,17 @@ class Program(models.Model):
 class Facility(models.Model):
   @classmethod
   def getBalance(cls,facility_id):
-    return cls.fees.get(facility_id,0) - cls.payments.get(facility_id,0)
+    if facility_id == 182:
+      print cls.fees[facility_id]
+      print cls.payments[facility_id]
+    return cls.fees[facility_id] - cls.payments[facility_id]
+
+  @classmethod
+  def updateBalance(cls):
+    cls.payments = defaultdict(int, { x["facility_id"]: x["payment"] for x in \
+                                           Payment.objects.values('facility_id').annotate(payment = Sum('amount')) })
+    cls.fees = defaultdict(int, { x["facility"]: x["fee"] for x in \
+                                       Fee.objects.values('facility').annotate(fee = Sum('amount')) })
 
   facility_name = models.CharField('Facility Name', max_length=200)
   date_joined = models.DateField(auto_now_add=True, null=True)
@@ -151,8 +161,20 @@ class Payment(models.Model):
 
   # update the Facility payments static variable
   def save(self, *args, **kwargs):
-      Facility.payments[self.facility.id] += amount
+
+      # print self.facility
+      # print Facility.payments[self.facility.id]
+
+      # original = Facility.payments[self.facility.id]
+      # new = self.amount
+      # int(original) + int(new)
+      # Facility.payments[self.facility.id] = original+new
+      # # Facility.payments[self.facility.id] += self.amount
+
       super(Payment, self).save(*args, **kwargs)
+
+      Facility.updateBalance()
+
 
   def __unicode__(self):
     return str(self.facility) + ': ' + str(self.amount)
@@ -167,7 +189,8 @@ class Fee(models.Model):
   def __unicode__(self):
     return "%s %d" % (self.type, self.year)
 
-Facility.fees = defaultdict(int, {x["facility"]: x["fee"] for x in \
-                            Fee.objects.annotate(fee=Sum('amount')).values('facility', 'fee')})
-Facility.payments = defaultdict(int, {x["facility_id"]: x["payment"] for x in \
-                                Payment.objects.annotate(payment=Sum('amount')).values('facility_id', 'payment')})
+Facility.payments = defaultdict(int, { x["facility_id"]: x["payment"] for x in \
+                                       Payment.objects.values('facility_id').annotate(payment = Sum('amount')) })
+Facility.fees = defaultdict(int, { x["facility"]: x["fee"] for x in \
+                                   Fee.objects.values('facility').annotate(fee = Sum('amount')) })
+
