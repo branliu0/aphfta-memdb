@@ -2,6 +2,8 @@ import operator as op
 
 from django.db import models
 from helpers import model_helpers
+from django.db.models import Sum
+from collections import defaultdict
 
 class Program(models.Model):
   name = models.CharField(max_length=100)
@@ -116,6 +118,15 @@ class Facility(models.Model):
   full_contact.short_description = "Contact"
   full_contact.allow_tags = True
 
+  def fees_total(self):
+    return sum(n.amount for n in self.fees.all())
+
+  def payments_total(self):
+    return sum(n.amount for n in self.payments.all())
+
+  def balance(self):
+    return self.fees_total() - self.payments_total()
+
   def programs_list(self):
     # Note: It is important to use programs.all() rather than
     # programs.values_list('name') or similar, or else you will always
@@ -136,6 +147,23 @@ class Facility(models.Model):
 
   class Meta:
     app_label = model_helpers.string_with_title("memdb", "Facility Information")
-#    verbose_name = u'Facility'
     verbose_name_plural = 'facilities'
     ordering = ['facility_name']
+
+class Payment(models.Model):
+  facility = models.ForeignKey(Facility, related_name='payments')
+  date = models.DateField()
+  amount = models.IntegerField()
+
+  def __unicode__(self):
+    return str(self.facility) + ': ' + str(self.amount)
+
+class Fee(models.Model):
+  type = models.CharField('Fee Type', max_length=250)
+  year = models.IntegerField()
+  description = models.TextField(blank=True)
+  amount = models.IntegerField()
+  facility = models.ManyToManyField(Facility, related_name='fees')
+
+  def __unicode__(self):
+    return "%s %d" % (self.type, self.year)

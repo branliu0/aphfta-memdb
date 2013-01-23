@@ -13,7 +13,6 @@ import json
 # 7. Membership
 # 8. Zone
 
-
 def run():
   facilities = []
   csvfile = open("aphfta_facilites.csv", "rU")

@@ -1,0 +1,76 @@
+<fieldset class="module aligned {{ fieldset.classes }}">
+    {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}
+    {% if fieldset.description %}
+        <div class="description">{{ fieldset.description|safe }}</div>
+    {% endif %}
+    {% for line in fieldset %}
+        {% if forloop.counter == 4 %}
+
+          <div class="form-row field-region">
+              <label for="region-select">Region:</label>
+              <select id="region-select" name="region">
+                <option value="none" selected="selected">None</option>
+                {% for region in adminform.model_admin.getRegions %}
+                  {% if region != "" %}
+                    <option value="{{region}}">{{region}}</option>
+                  {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+
+          {% endif %}
+
+        <div class="form-row{% if line.fields|length_is:'1' and line.errors %} errors{% endif %}{% for field in line %}{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% endfor %}">
+            {% if line.fields|length_is:'1' %}{{ line.errors }}{% endif %}
+            {% for field in line %}
+                    <div{% if not line.fields|length_is:'1' %} class="field-box{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% if not field.is_readonly and field.errors %} errors{% endif %}"{% endif %}>
+                        {% if not line.fields|length_is:'1' and not field.is_readonly %}{{ field.errors }}{% endif %}
+                        {% if field.is_checkbox %}
+                            {{ field.field }}{{ field.label_tag }}
+                        {% else %}
+                            {{ field.label_tag }}
+                            {% if field.is_readonly %}
+                                <p>{{ field.contents }}</p>
+                            {% else %}
+                                {{ field.field }}
+                            {% endif %}
+                        {% endif %}
+                        {% if field.field.help_text %}
+                            <p class="help">{{ field.field.help_text|safe }}</p>
+                        {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+</fieldset>
+<script>
+  $('#region-select').change(function() {
+      region = $('#region-select').val();
+
+      $.ajax({
+        url: "/members/regions/"+region,
+        type: 'get',
+        success: function(results) {
+          input_str = '';
+          results = JSON.parse(results);
+          console.log(results);
+
+          SelectBox.cache["id_facility_from"] = [];
+          SelectBox.cache["id_facility_to"] = [];
+
+          for (var i = 0; i < results.include.length; i++) {
+            SelectBox.add_to_cache('id_facility_to', {'value': results.include[i].id,
+                                                      'text': results.include[i].name})
+          }
+
+          for (var i = 0; i < results.exclude.length; i++) {
+            SelectBox.add_to_cache('id_facility_from', {'value': results.exclude[i].id,
+                                                        'text': results.exclude[i].name})
+          }
+
+          SelectBox.redisplay("id_facility_to");
+          SelectBox.redisplay("id_facility_from");
+        }
+      });
+  });
+</script>

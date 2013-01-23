@@ -1,0 +1,98 @@
+.year {
+  font-size: 17px;
+  margin-bottom: 10px;
+}
+
+.current-years li {
+  width: 175px;
+  overflow: visible;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+#past-years {
+  margin-right: 15px;
+  width: 175px;
+}
+
+#payment-list {
+  margin-top: 20px;
+}
+
+#payment-list li {
+  list-style: none;
+}
+
+ul {
+  -webkit-margin-before: 0em;
+  -webkit-margin-after: 0em;
+  -webkit-margin-start: 0px;
+  -webkit-margin-end: 0px;
+  -webkit-padding-start: 0px;
+}
+
+.payment {
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.yearly-summary {
+  position: absolute;
+  top: 400px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.yearly-summary div {
+  padding-bottom: 5px;
+}
+
+#add-payment {
+  font-size: 10px;
+}
+
+.summary {
+  font-size: 17px;
+  position: absolute;
+  bottom: 20px;
+}
+
+.annual-fee {
+  font-size: inherit;
+}
+
+.total-paid {
+  font-size: inherit;
+}
+
+.payment-container {
+  list-style: none;
+}
+
+.btn span.icon {
+  position: absolute;
+  top: 230px;
+  background: url("/static/img/arrow-right.png") no-repeat;
+  float: right;
+  width: 26px;
+  height: 26px;
+}
+
+.btn span.icon.right{
+  right: 25px;
+}
+
+.btn span.icon.left {
+    float: left;
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}
+
+#modal-contents {
+    position: relative;
+    left: 43px;
+}

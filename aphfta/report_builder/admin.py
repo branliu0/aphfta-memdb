@@ -25,12 +25,12 @@ class FilterFieldInline(admin.StackedInline):
     form = FilterFieldForm
     extra = 0
     sortable_field_name = "position"
-    
+
 class ReportAdmin(admin.ModelAdmin):
     list_display = ('edit_report', 'name', 'download_excel_spreadsheet', 'created', 'modified')
     inlines = [DisplayFieldInline, FilterFieldInline]
     list_display_links = []
-    
+
     def edit_report(self, obj):
         return '<a href="%s">Edit</a>' % obj.get_absolute_url()
     edit_report.allow_tags = True

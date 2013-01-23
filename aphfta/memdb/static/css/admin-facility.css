@@ -1,0 +1,20 @@
+#balance-modal {
+    display: none;
+    position: relative;
+    width: 795px;
+    height: 500px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    background-color: #eee8dc;
+    box-shadow: 2px 1px 7px 3px #888888;
+    padding: 10px;
+}
+
+#facility-balance {
+    margin:5px 0px 0.5em 0px;
+}
+
+#facility-region {
+    margin:5px 0px 0.5em 0px;
+}
+
