@@ -117,7 +117,7 @@
                   xhr.setRequestHeader("X-CSRFToken", csrftoken);
           },
           success: function(results) {
-            new_balance = $('#facility-balance').html().match(/\d+/) - new_payment_value;
+            new_balance = $('#facility-balance').html().match(/-?\d+/) - new_payment_value;
             new_total_paid = parseInt(currently_adding.find('.total-paid').html().match(/\d+/)) + parseInt(new_payment_value);
 
             // update balance at top of modal
