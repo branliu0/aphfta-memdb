@@ -23,6 +23,7 @@ class FacilityAdmin(admin.ModelAdmin):
   )
   filter_horizontal = ('programs',)
   ordering = ('facility_name',)
+  save_on_top = True
 
   class Media:
     css = {
