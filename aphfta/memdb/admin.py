@@ -57,6 +57,10 @@ class FeeAdmin(admin.ModelAdmin):
 
   filter_horizontal = ('facility',)
 
+  def save_related(self, request, form, formsets, change):
+    super(FeeAdmin,self).save_related(request, form, formsets, change)
+    Facility.updateBalance()
+
   '''
     This was originally meant for when you you could either add all regions in a clinic, or add individual clinics,
     now you can do both at the same time

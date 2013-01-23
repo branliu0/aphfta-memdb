@@ -161,16 +161,6 @@ class Payment(models.Model):
 
   # update the Facility payments static variable
   def save(self, *args, **kwargs):
-
-      # print self.facility
-      # print Facility.payments[self.facility.id]
-
-      # original = Facility.payments[self.facility.id]
-      # new = self.amount
-      # int(original) + int(new)
-      # Facility.payments[self.facility.id] = original+new
-      # # Facility.payments[self.facility.id] += self.amount
-
       super(Payment, self).save(*args, **kwargs)
 
       Facility.updateBalance()
@@ -185,6 +175,11 @@ class Fee(models.Model):
   description = models.TextField(blank=True)
   amount = amount = models.IntegerField()
   facility = models.ManyToManyField(Facility)
+
+  # update the Facility payments static variable
+  def save(self, *args, **kwargs):
+      super(Fee, self).save(*args, **kwargs)
+      Facility.updateBalance()
 
   def __unicode__(self):
     return "%s %d" % (self.type, self.year)
