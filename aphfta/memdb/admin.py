@@ -23,7 +23,15 @@ class FacilityAdmin(admin.ModelAdmin):
   )
   filter_horizontal = ('programs',)
   ordering = ('facility_name',)
+
+  # This puts the bar of save buttons at the top of the admin edit page as well
   save_on_top = True
+
+  # Manually override the queryset function so as to prefetch related programs, so that
+  # the `programs_list` method doesn't result in an additional query.
+  def queryset(self, request):
+    qs = super(FacilityAdmin, self).queryset(request)
+    return qs.prefetch_related('programs')
 
   class Media:
     css = {

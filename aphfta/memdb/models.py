@@ -117,7 +117,11 @@ class Facility(models.Model):
   full_contact.allow_tags = True
 
   def programs_list(self):
-    return ",".join(map(op.itemgetter(0), self.programs.values_list('name'))) \
+    # Note: It is important to use programs.all() rather than
+    # programs.values_list('name') or similar, or else you will always
+    # make a new query, rather than possibly loading the data from cache
+    # due to a prefetch query.
+    return ",".join(map(op.attrgetter('name'), self.programs.all())) \
         or "None"
 
   def __unicode__(self):
