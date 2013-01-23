@@ -13,20 +13,6 @@ class Program(models.Model):
     return self.name
 
 class Facility(models.Model):
-  @classmethod
-  def getBalance(cls,facility_id):
-    if facility_id == 182:
-      print cls.fees[facility_id]
-      print cls.payments[facility_id]
-    return cls.fees[facility_id] - cls.payments[facility_id]
-
-  @classmethod
-  def updateBalance(cls):
-    cls.payments = defaultdict(int, { x["facility_id"]: x["payment"] for x in \
-                                           Payment.objects.values('facility_id').annotate(payment = Sum('amount')) })
-    cls.fees = defaultdict(int, { x["facility"]: x["fee"] for x in \
-                                       Fee.objects.values('facility').annotate(fee = Sum('amount')) })
-
   facility_name = models.CharField('Facility Name', max_length=200)
   date_joined = models.DateField(auto_now_add=True, null=True)
   address = models.CharField('Address', max_length=250, blank=True)
@@ -132,16 +118,14 @@ class Facility(models.Model):
   full_contact.short_description = "Contact"
   full_contact.allow_tags = True
 
+  def fees_total(self):
+    return sum(n.amount for n in self.fees.all())
+
+  def payments_total(self):
+    return sum(n.amount for n in self.payments.all())
+
   def balance(self):
-    fees = Fee.objects.filter(facility=self.id).aggregate(Sum('amount'))
-    payments = Payment.objects.filter(facility=self.id).aggregate(Sum('amount'))
-
-    if fees['amount__sum'] == None:
-      fees['amount__sum'] = 0
-    if payments['amount__sum'] == None:
-      payments['amount__sum'] = 0
-
-    return fees['amount__sum'] - payments['amount__sum']
+    return self.fees_total() - self.payments_total()
 
   def programs_list(self):
     # Note: It is important to use programs.all() rather than
@@ -167,16 +151,9 @@ class Facility(models.Model):
     ordering = ['facility_name']
 
 class Payment(models.Model):
-  facility = models.ForeignKey(Facility)
+  facility = models.ForeignKey(Facility, related_name='payments')
   date = models.DateField()
   amount = models.IntegerField()
-
-  # update the Facility payments static variable
-  def save(self, *args, **kwargs):
-      super(Payment, self).save(*args, **kwargs)
-
-      Facility.updateBalance()
-
 
   def __unicode__(self):
     return str(self.facility) + ': ' + str(self.amount)
@@ -185,19 +162,8 @@ class Fee(models.Model):
   type = models.CharField('Fee Type', max_length=250)
   year = models.IntegerField()
   description = models.TextField(blank=True)
-  amount = amount = models.IntegerField()
-  facility = models.ManyToManyField(Facility)
-
-  # update the Facility payments static variable
-  def save(self, *args, **kwargs):
-      super(Fee, self).save(*args, **kwargs)
-      Facility.updateBalance()
+  amount = models.IntegerField()
+  facility = models.ManyToManyField(Facility, related_name='fees')
 
   def __unicode__(self):
     return "%s %d" % (self.type, self.year)
-
-Facility.payments = defaultdict(int, { x["facility_id"]: x["payment"] for x in \
-                                       Payment.objects.values('facility_id').annotate(payment = Sum('amount')) })
-Facility.fees = defaultdict(int, { x["facility"]: x["fee"] for x in \
-                                   Fee.objects.values('facility').annotate(fee = Sum('amount')) })
-

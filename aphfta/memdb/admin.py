@@ -30,22 +30,21 @@ class FacilityAdmin(admin.ModelAdmin):
   filter_horizontal = ('programs',)
   ordering = ('facility_name',)
 
-  def edit_balance(self, obj):
-    id = obj.id
-    balance = obj.getBalance(obj.id)
-    if balance == 0:
-        return '<a class="paid balance" data-id="{0}" href="#">Paid</a>'.format(id)
-    return '<a class="balance" data-id="{0}" href="#">{1}</a>'.format(id, balance)
-  edit_balance.allow_tags = True
-
   # This puts the bar of save buttons at the top of the admin edit page as well
   save_on_top = True
+
+  def edit_balance(self, obj):
+    balance = obj.balance()
+    return '<a class="balance" data-id="{0}" href="#">{1}</a>'\
+        .format(obj.id, "Paid" if balance == 0 else balance)
+  edit_balance.short_description = "Edit Balance"
+  edit_balance.allow_tags = True
 
   # Manually override the queryset function so as to prefetch related programs, so that
   # the `programs_list` method doesn't result in an additional query.
   def queryset(self, request):
     qs = super(FacilityAdmin, self).queryset(request)
-    return qs.prefetch_related('programs')
+    return qs.prefetch_related('programs', 'fees', 'payments')
 
   class Media:
     css = {
