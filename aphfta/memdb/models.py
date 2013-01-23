@@ -124,6 +124,13 @@ class Facility(models.Model):
     return ",".join(map(op.attrgetter('name'), self.programs.all())) \
         or "None"
 
+  def completeness(self):
+    fields = self._meta.fields
+    percent = len(filter(lambda field: getattr(self, field.attname), fields)) / \
+        float(len(fields))
+    return "%d%%" % int(100 * percent)
+  completeness.short_description = 'Data Completeness'
+
   def __unicode__(self):
     return self.facility_name
 
