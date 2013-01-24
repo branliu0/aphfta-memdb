@@ -92,11 +92,13 @@ def add_payment(request, facility_id=None):
         return HttpResponse("error: missing date")
     if not request.POST['amount']:
         return HttpResponse("error: missing amount")
+    if not request.POST['year']:
+        return HttpResponse("error: missing year")
 
     args = request.POST.dict()
 
-    if len(args) != 2:
-        return HttpResponse("error: need only date and amount")
+    if len(args) != 3:
+        return HttpResponse("error: need only date, amount and year")
 
     args['facility_id'] = facility_id
 

@@ -65,96 +65,99 @@
     </div>
 
     <button id="save-payment" style="position:absolute;bottom:25px;right:140px">Save Payment</button>
-<script>
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie != '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = jQuery.trim(cookies[i]);
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
+    <script>
+      function getCookie(name) {
+          var cookieValue = null;
+          if (document.cookie && document.cookie != '') {
+              var cookies = document.cookie.split(';');
+              for (var i = 0; i < cookies.length; i++) {
+                  var cookie = jQuery.trim(cookies[i]);
+                  // Does this cookie string begin with the name we want?
+                  if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                      break;
+                  }
+              }
+          }
+          return cookieValue;
+      }
+      var csrftoken = getCookie('csrftoken');
+
+      $(".add-payment").click(function(event){
+          currently_adding = $(event.target).parent().parent();
+          currently_adding.append("<li id='payment-input'>Amount: <input type='text'/></li>");
+      });
+
+      var month_names = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+
+      now = new Date();
+      month = month_names[now.getMonth()];
+      day = now.getDate();
+      year = now.getFullYear();
+      now_str = month + ". " + day + ", " + year;
+
+      $("#save-payment").click(function(event) {
+          new_payment_value = $('#payment-input input').val();
+          payment_year = $('#payment-input').parent().find('.year').text().match(/\d+/)[0];
+          $('#payment-input').replaceWith("<li class='payment'>"+now_str+": "+new_payment_value+"</li>");
+
+          $.ajax({
+            // how do i use url tag?
+            url: "/members/payments/"+id+"/add",
+            type: "post",
+            data: {
+                    date: year+"-"+now.getMonth()+1+"-"+day,
+                    year: payment_year,
+                    amount: new_payment_value
+            },
+            beforeSend: function(xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            success: function(results) {
+              new_balance = $('#facility-balance').html().match(/-?\d+/) - new_payment_value;
+              new_total_paid = parseInt(currently_adding.find('.total-paid').html().match(/\d+/)) + parseInt(new_payment_value);
+
+              // update balance at top of modal
+              $('#facility-balance').html("Outstanding Balance: TZS " + new_balance);
+
+              // update balance at bottom of modal
+              $('.current-remaining-balance').html("Balance: " + new_balance);
+
+              // update total paid
+              currently_adding.find('.total-paid').html("Paid: " + new_total_paid);
+
+              $("a[data-id='" + {{ facility_id }} + "']").html(new_balance);
+
+
+            },
+            error: function(results) {
+                $('#balance-modal').html("There was an error, try again later.");
             }
-        }
-        return cookieValue;
-    }
-    var csrftoken = getCookie('csrftoken');
+          });
+      });
 
-    $(".add-payment").click(function(event){
-        currently_adding = $(event.target).parent().parent();
-        currently_adding.append("<li id='payment-input'>Amount: <input type='text'/></li>");
-    });
-
-    var month_names = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
-
-    now = new Date();
-    month = month_names[now.getMonth()];
-    day = now.getDate();
-    year = now.getFullYear();
-    now_str = month + ". " + day + ", " + year;
-
-    $("#save-payment").click(function(event) {
-        new_payment_value = $('#payment-input input').val();
-        $('#payment-input').replaceWith("<li class='payment'>"+now_str+": "+new_payment_value+"</li>");
-
+      function switchInterval(amount) {
         $.ajax({
           // how do i use url tag?
-          url: "/members/payments/"+id+"/add",
-          type: "post",
+          url: "/members/payments/" + id,
           data: {
-                  date: year+"-"+now.getMonth()+1+"-"+day,
-                  amount: new_payment_value
-          },
-          beforeSend: function(xhr, settings) {
-                  xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            interval: {{ interval }} + amount
           },
           success: function(results) {
-            new_balance = $('#facility-balance').html().match(/-?\d+/) - new_payment_value;
-            new_total_paid = parseInt(currently_adding.find('.total-paid').html().match(/\d+/)) + parseInt(new_payment_value);
-
-            // update balance at top of modal
-            $('#facility-balance').html("Outstanding Balance: TZS " + new_balance);
-
-            // update balance at bottom of modal
-            $('.current-remaining-balance').html("Balance: " + new_balance);
-
-            // update total paid
-            currently_adding.find('.total-paid').html("Paid: " + new_total_paid);
-
-            $("a[data-id='" + {{ facility_id }} + "']").html(new_balance);
-          },
-          error: function(results) {
-              $('#balance-modal').html("There was an error, try again later.");
+            $('#balance-modal').html(results);
           }
         });
-    });
+      }
 
-    function switchInterval(amount) {
-      $.ajax({
-        // how do i use url tag?
-        url: "/members/payments/" + id,
-        data: {
-          interval: {{ interval }} + amount
-        },
-        success: function(results) {
-          $('#balance-modal').html(results);
-        }
-      });
-    }
+      function switchIntervalLeft() {
+        switchInterval(1)
+      }
+      function switchIntervalRight() {
+        switchInterval(-1)
+      }
 
-    function switchIntervalLeft() {
-      switchInterval(1)
-    }
-    function switchIntervalRight() {
-      switchInterval(-1)
-    }
-
-    $('.btn.left').click(switchIntervalLeft);
-    $('.btn.right').click(switchIntervalRight);
-
-</script>
+      $('.btn.left').click(switchIntervalLeft);
+      $('.btn.right').click(switchIntervalRight);
+    </script>
 </div>
