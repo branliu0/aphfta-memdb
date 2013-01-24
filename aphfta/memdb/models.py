@@ -34,6 +34,8 @@ class Facility(models.Model):
   email2 = models.EmailField('Email 2', blank=True)
   email3 = models.EmailField('Email 3', blank=True)
 
+
+  membership = models.NullBooleanField("APHFTA Member")
   programs = models.ManyToManyField(Program, blank=True, related_name='facilities')
 
   moh_reg_cert = models.IntegerField('MOH Facility Registration Certificate No.', blank=True, null=True)
@@ -44,7 +46,7 @@ class Facility(models.Model):
   )
   facility_type = models.CharField('Facility Type', max_length=2,
                                    choices=FACILITY_TYPE, blank=True)
-  membership = models.NullBooleanField("APHFTA Member")
+
   membership_type = models.CharField("Membership Type", max_length=250, blank=True)
 
   doctor_ic = models.CharField('Doctor In Charge', max_length=250, blank=True)
@@ -79,8 +81,8 @@ class Facility(models.Model):
 
   medical_officers = models.IntegerField('Medical Officers', blank=True, null=True)
   assistant_medical_officers = models.IntegerField('Assistant Medical Officers', blank=True, null=True)
-  clinical_officers = models.IntegerField('Assistant Medical Officers', blank=True, null=True)
-  assistant_clinical_officers = models.IntegerField('Clinical Officers', blank=True, null=True)
+  clinical_officers = models.IntegerField('Clinical Officers', blank=True, null=True)
+  assistant_clinical_officers = models.IntegerField('Assistant Clinical Officers', blank=True, null=True)
   dental_officers = models.IntegerField('Dental Officers', blank=True, null=True)
   dental_assistants = models.IntegerField('Dental Assistants', blank=True, null=True)
 
