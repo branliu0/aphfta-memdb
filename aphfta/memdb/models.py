@@ -24,7 +24,7 @@ class Facility(models.Model):
       ("LZ", "Lake Zone"),
       ("SZ", "Southern Zone")
   )
-  zone = models.CharField(max_length=2, blank=True, choices=ZONES)
+  zone = models.CharField(max_length=255, blank=True, choices=ZONES)
   tel_office = models.CharField('Tel No. Office', max_length=250, blank=True)
   tel_office2 = models.CharField('Tel No. Office 2', max_length=250, blank=True)
   tel_office3 = models.CharField('Tel No. Office 3', max_length=250, blank=True)
@@ -39,23 +39,21 @@ class Facility(models.Model):
   programs = models.ManyToManyField(Program, blank=True, related_name='facilities')
 
   moh_reg_cert = models.IntegerField('MOH Facility Registration Certificate No.', blank=True, null=True)
-  FACILITY_TYPE = (
+  ORGANIZATION_TYPE = (
          ("VO", 'Vountary Agency'),
          ("PR", 'Private'),
          ("CH", 'Charitable Organisation')
   )
-  facility_type = models.CharField('Facility Type', max_length=2,
-                                   choices=FACILITY_TYPE, blank=True)
+  organization_type = models.CharField('Organization Type', max_length=255,
+                                   choices=ORGANIZATION_TYPE, blank=True)
 
-  membership_type = models.CharField("Membership Type", max_length=250, blank=True)
+  facility_type = models.CharField("Facility Type", max_length=250, blank=True)
 
   doctor_ic = models.CharField('Doctor In Charge', max_length=250, blank=True)
   qualifications = models.CharField('Qualifications', max_length=500, blank=True)
   outpatient = models.CharField('Outpatient', max_length=500, blank=True)
   inpatient = models.CharField('Inpatient', max_length=500, blank=True)
   wards = models.TextField(blank=True)
-
-  hospital_health_maternity = models.NullBooleanField('Hospital, Health Centre, Dispensary, Maternity Homes', blank=True, null=True)
 
   major_operation_theaters = models.IntegerField('Major Operation Theatres', blank=True, null=True)
   minor_operation_theaters = models.IntegerField('Minor Operation Theatres', blank=True, null=True)

@@ -13,7 +13,7 @@ class FacilityAdmin(admin.ModelAdmin):
 
   search_fields = ('facility_name', 'doctor_ic', 'tel_office', 'moh_reg_cert', 'email')
   list_filter = (
-      SelectFilter('membership_type'),
+      SelectFilter('facility_type'),
       SelectFilter('region'),
       SelectFilter('district'),
       SelectFilter('zone'),
