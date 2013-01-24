@@ -36,9 +36,7 @@
         <ul class="current-years" style="float:left">
           <li class="year">
             {{key}}
-            {% if forloop.last and interval == 1%}
-              <a id="add-payment" href="#">Add Payment</a>
-            {% endif %}
+            <a class="add-payment" href="#">Add Payment</a>
           </li>
 
           {% for value in values.payments %}
@@ -66,9 +64,7 @@
       {% endfor %}
     </div>
 
-    {% if interval == 1%}
-      <button id="save-payment" style="position:absolute;bottom:25px;right:140px">Save Payment</button>
-    {% endif %}
+    <button id="save-payment" style="position:absolute;bottom:25px;right:140px">Save Payment</button>
 <script>
     function getCookie(name) {
         var cookieValue = null;
@@ -87,7 +83,7 @@
     }
     var csrftoken = getCookie('csrftoken');
 
-    $("#add-payment").click(function(event){
+    $(".add-payment").click(function(event){
         currently_adding = $(event.target).parent().parent();
         currently_adding.append("<li id='payment-input'>Amount: <input type='text'/></li>");
     });

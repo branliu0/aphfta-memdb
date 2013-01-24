@@ -163,7 +163,7 @@ class Payment(models.Model):
 class Fee(models.Model):
   type = models.CharField('Fee Type', max_length=250)
   year = models.IntegerField()
-  description = models.TextField(blank=True)
+  description = models.TextField(blank=True, help_text="Optional")
   amount = models.IntegerField()
   facility = models.ManyToManyField(Facility, related_name='fees')
 
