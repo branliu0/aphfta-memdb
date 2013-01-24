@@ -46,7 +46,7 @@ def run():
 
     fields["region"] = row[4]
     fields["district"] = row[5]
-    fields["membership_type"] = row[6]
+    fields["facility_type"] = row[6]
 
     membership = row[7].lower()
     fields["membership"] = (membership != "no")
