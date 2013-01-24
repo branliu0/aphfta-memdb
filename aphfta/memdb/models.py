@@ -34,7 +34,6 @@ class Facility(models.Model):
   email2 = models.EmailField('Email 2', blank=True)
   email3 = models.EmailField('Email 3', blank=True)
 
-
   membership = models.NullBooleanField("APHFTA Member")
   programs = models.ManyToManyField(Program, blank=True, related_name='facilities')
 
@@ -46,8 +45,22 @@ class Facility(models.Model):
   )
   organization_type = models.CharField('Organization Type', max_length=255,
                                    choices=ORGANIZATION_TYPE, blank=True)
-
-  facility_type = models.CharField("Facility Type", max_length=250, blank=True)
+  
+  FACILITY_TYPE = (
+    ("clinic", "Clinic"),
+    ("dispensary", "Dispensary"),
+    ("health centre", "Health Centre"),
+    ("hospital", "Hospital"),
+    ("laboratory", "Laboratory"),
+    ("maternity", "Maternity"),
+    ("maternity home", "Maternity Home"),
+    ("medical centre", "Medical Centre"),
+    ("nursing home", "Nursing Home"),
+    ("pharmacy", "Pharmacy"),
+  )
+                                     
+  facility_type = models.CharField("Facility Type", max_length=250, 
+    blank=True, choices=FACILITY_TYPE)
 
   doctor_ic = models.CharField('Doctor In Charge', max_length=250, blank=True)
   qualifications = models.CharField('Qualifications', max_length=500, blank=True)
