@@ -34,9 +34,16 @@ class FacilityAdmin(admin.ModelAdmin):
   save_on_top = True
 
   def edit_balance(self, obj):
+    '''
+      Displays link on balance column for editting facility payments
+    '''
     balance = obj.balance()
+    # green balance button with + symbol if facility pays more than is owed
+    if balance < 0:
+      return '<a class="balance" style="font-weight:bold;color:green" data-id="{0}" href="#">+{1}</a>'\
+          .format(obj.id, "Paid" if balance == 0 else abs(balance))
     return '<a class="balance" data-id="{0}" href="#">{1}</a>'\
-        .format(obj.id, "Paid" if balance == 0 else balance)
+        .format(obj.id, "Paid" if balance == 0 else abs(balance))
   edit_balance.short_description = "Edit Balance"
   edit_balance.allow_tags = True
 
