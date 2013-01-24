@@ -19,10 +19,10 @@ class Facility(models.Model):
   district = models.CharField('District', max_length=250, blank=True)
   region = models.CharField('Region', max_length=250, blank=True)
   ZONES = (
-      ("NZ", "Northern Zone"),
-      ("CZ", "Coastal Zone"),
-      ("LZ", "Lake Zone"),
-      ("SZ", "Southern Zone")
+      ("northern", "Northern Zone"),
+      ("coastal", "Coastal Zone"),
+      ("lake", "Lake Zone"),
+      ("southern", "Southern Zone")
   )
   zone = models.CharField(max_length=255, blank=True, choices=ZONES)
   tel_office = models.CharField('Tel No. Office', max_length=250, blank=True)
@@ -40,9 +40,9 @@ class Facility(models.Model):
 
   moh_reg_cert = models.IntegerField('MOH Facility Registration Certificate No.', blank=True, null=True)
   ORGANIZATION_TYPE = (
-         ("VO", 'Vountary Agency'),
-         ("PR", 'Private'),
-         ("CH", 'Charitable Organisation')
+         ("voluntary agency", 'Vountary Agency'),
+         ("private", 'Private'),
+         ("charitable organization", 'Charitable Organization')
   )
   organization_type = models.CharField('Organization Type', max_length=255,
                                    choices=ORGANIZATION_TYPE, blank=True)
