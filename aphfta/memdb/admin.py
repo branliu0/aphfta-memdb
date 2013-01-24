@@ -123,6 +123,7 @@ class FacilityAdmin(admin.ModelAdmin):
 class FeeAdmin(admin.ModelAdmin):
   list_display = ('type', 'year', 'amount')
   search_fields = ('type', 'year', 'amount', 'facility__facility_name')
+  ordering = ('-year',)
 
   list_filter = (
     M2MSelectFilter('facility', 'facility_name'),
@@ -175,6 +176,7 @@ class FeeAdmin(admin.ModelAdmin):
 class PaymentAdmin(admin.ModelAdmin):
   list_display = ('facility', 'date', 'amount')
   search_fields = ('facility',)
+  ordering = ('-date',)
 
   list_filter = (
     FKSelectFilter('facility', 'facility_name'),
