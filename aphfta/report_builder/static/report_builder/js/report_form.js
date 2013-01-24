@@ -53,8 +53,9 @@ function addFieldList(el) {
   row_html += '<td><input id="id_displayfield_set-'+i+'-field" name="displayfield_set-'+i+'-field" type="hidden" value="' + name + '"/>'
   row_html += '<input id="id_displayfield_set-'+i+'-name" name="displayfield_set-'+i+'-name" type="text" value="' + name + '"/></td>';
   row_html += '<input type="checkbox" name="displayfield_set-'+i+'-sort_reverse" id="id_displayfield_set-'+i+'-sort_reverse"></td>';
-  row_html += '<td><input type="checkbox" name="displayfield_set-'+i+'-DELETE" id="id_displayfield_set-'+i+'-DELETE">';
-  row_html += '<span class="hide_me"><input type="text" name="displayfield_set-'+i+'-position" value="999" id="id_displayfield_set-'+i+'-position"></span></td>';
+  row_html += '<td><input style="display: none;" type="checkbox" name="displayfield_set-'+i+'-DELETE" id="id_displayfield_set-'+i+'-DELETE">';
+  row_html += '<span class="hide_me"><input type="text" name="displayfield_set-'+i+'-position" value="999" id="id_displayfield_set-'+i+'-position"></span>' +
+    '<a href="#" class="delete-row">Delete</a></td>';
   row_html += '</tr>';
   $('#field_list_table > tbody:last').append(row_html);
 }
@@ -93,8 +94,9 @@ function addFieldFilter(el) {
     row_html += '<td><input id="id_fil-'+i+'-filter_value" type="text" name="fil-'+i+'-filter_value" value="" maxlength="2000"></td>'
   }
   row_html += '<td><input type="checkbox" name="fil-'+i+'-exclude" id="id_fil-'+i+'-exclude"></td>'
-  row_html += '<td><input type="checkbox" name="fil-'+i+'-DELETE" id="id_fil-'+i+'-DELETE">'
-  row_html += '<span class="hide_me"><input type="text" name="fil-'+i+'-position" value="0" id="id_fil-'+i+'-position"></span></td>'
+  row_html += '<td><input style="display: none;" type="checkbox" name="fil-'+i+'-DELETE" id="id_fil-'+i+'-DELETE">'
+  row_html += '<span class="hide_me"><input type="text" name="fil-'+i+'-position" value="0" id="id_fil-'+i+'-position"></span>' +
+    '<a href="#" class="delete-row">Delete</a></td>'
   row_html += '</tr>'
   $('#field_filter_table > tbody:last').append(row_html);
   $( ".datepicker" ).datepicker();
@@ -214,11 +216,15 @@ $(function() {
     $(".field-button").dblclick(function(e) {
       var activeTab = $("#tabs li.ui-state-active")
       var tabIndex = $("#tabs li").index(activeTab);
-      console.log(tabIndex);
       if (tabIndex == 0) {
         addFieldList(e.target);
       } else if (tabIndex == 1) {
         addFieldFilter(e.target);
       }
-    })
+    });
+
+    $("table").on('click', '.delete-row', function(e) {
+      e.preventDefault();
+      $(e.target).closest("tr").remove();
+    });
 });

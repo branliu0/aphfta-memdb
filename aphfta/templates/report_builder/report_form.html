@@ -68,7 +68,7 @@
                     <td><span style="cursor: move;" class="ui-icon ui-icon-arrowthick-2-n-s"></span></td>
                     <td>{{ form.field }}{{ form.field_verbose }}{{ form.path }}</td>
                     <td>{{ form.name }}</td>
-                    <td>{{ form.DELETE }}<span class="hide_me">{{ form.position }}</span></td>
+                    <td><span class="hide_me">{{ form.DELETE }}{{ form.position }}</span><a href="#" class="delete-row">Delete</a></td>
                   </tr>
                 {% endfor %}
               </tbody>
@@ -109,7 +109,7 @@
                         <td>{{ form.filter_value }}</td>
                     {% endif %}
                     <td>{{ form.exclude }}</td>
-                    <td>{{ form.DELETE }}<span class="hide_me">{{ form.position }}</span></td>
+                    <td><span class="hide_me">{{ form.DELETE }}{{ form.position }}</span><a href="#" class="delete-row">Delete</a></td>
                   </tr>
                 {% endfor %}
               </tbody>
