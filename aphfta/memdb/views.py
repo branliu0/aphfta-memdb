@@ -42,9 +42,9 @@ def payment(request, id=None):
     recent_fees = Fee.objects.filter(facility=id, year__range=(start_year,end_year))
     old_fees  = Fee.objects.filter(facility=id, year__lt=str(start_year))
 
-    recent_payments = Payment.objects.filter(facility_id=id, date__range=[str(start_year)+"-01-01", str(end_year)+"-12-31"]) \
+    recent_payments = Payment.objects.filter(facility_id=id, year__range=(start_year, end_year)) \
                               .order_by('date')
-    old_payments = Payment.objects.filter(facility_id=id, date__lt=str(start_year)+"-01-01") \
+    old_payments = Payment.objects.filter(facility_id=id, year__lt=start_year) \
                               .values('amount')
 
     old_fees_total = sum(map(lambda x: x.amount, old_fees))
@@ -58,7 +58,7 @@ def payment(request, id=None):
     past_years["balance_remaining"] = old_fees_total - old_payment_total
 
     for payment in recent_payments:
-        year = str(payment.date.year)
+        year = str(payment.year)
         years[year]['payments'].append({"date": payment.date, "amount": payment.amount})
         years[year]['paid'] += payment.amount
 
