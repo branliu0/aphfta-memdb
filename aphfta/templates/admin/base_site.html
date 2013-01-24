@@ -7,3 +7,12 @@
 {% block branding %}
 <h1 id="site-name">{% trans 'APHFTA Membership Database' %}</h1>
 {% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style type="text/css">
+  #changelist-filter {
+    padding-bottom: 10px;
+  }
+</style>
+{% endblock %}
