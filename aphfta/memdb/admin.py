@@ -10,7 +10,6 @@ from helpers.admin_filters import SelectFilter, BooleanSelectFilter, M2MSelectFi
 class FacilityAdmin(admin.ModelAdmin):
   list_display = ('facility_name', 'doctor_ic', 'full_contact', 'address', 'region', \
                   'district', 'zone', 'programs_list', 'completeness')
-
   search_fields = ('facility_name', 'doctor_ic', 'tel_office', 'moh_reg_cert', 'email')
   list_filter = (
       SelectFilter('facility_type'),
@@ -28,10 +27,52 @@ class FacilityAdmin(admin.ModelAdmin):
       BooleanSelectFilter('ambulance'),
   )
   filter_horizontal = ('programs',)
-  ordering = ('facility_name',)
 
   # This puts the bar of save buttons at the top of the admin edit page as well
   save_on_top = True
+
+  fieldsets = (
+      ('Basic Information', {
+        'fields': ('facility_name', 'address', 'district', 'region', 'zone')
+      }),
+      ('Contact Information', {
+        'classes': ['collapse'],
+        'fields': (('tel_office', 'tel_office2', 'tel_office3'),
+                    'tel_mobile', 'fax',
+                    ('email', 'email2', 'email3'))
+      }),
+      ('Facility Information', {
+        'classes': ['collapse'],
+        'fields': ('membership', 'programs', 'moh_reg_cert', 'organization_type',
+                    'facility_type', ('doctor_ic', 'qualifications'),
+                    ('outpatient', 'inpatient'), 'wards',
+                    ('major_operation_theaters', 'minor_operation_theaters'),
+                    'delivery_beds')
+      }),
+      ('Facility Services', {
+        'classes': ['collapse'],
+        'fields': (('antenatal_mch_serices', 'other_speciality_services'),
+                    ('lab', 'xray', 'blood_bank', 'pharmacy', 'dental',
+                      'ultrasonography', 'physiotherapy', 'icu', 'ambulance'))
+      }),
+      ('Facility Staff', {
+        'classes': ['collapse'],
+        'fields': ('physicians', 'surgeons', 'obstetricians', 'paediatricians',
+                    ('medical_officers', 'assistant_medical_officers'),
+                    ('clinical_officers', 'assistant_clinical_officers'),
+                    ('dental_officers', 'dental_assistants'),
+                    ('nurses_grade_A', 'nurses_grade_B', 'nursing_assistants'),
+                    'ward_attendants',
+                    ('lab_technologists', 'lab_technicians', 'lab_assistants'),
+                    ('rad_technologists', 'rad_technicians', 'rad_assistants'),
+                    'other_staff')
+      }),
+      ('Facility Volume', {
+        'classes': ['collapse'],
+        'fields': (('avg_outpatients_daily', 'avg_inpatients_daily'),
+                    ('avg_deliveries_month', 'avg_mch_attendance_month'))
+      }),
+  )
 
   def edit_balance(self, obj):
     '''
