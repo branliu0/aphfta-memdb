@@ -48,10 +48,17 @@ class FacilityAdmin(admin.ModelAdmin):
 
   class Media:
     css = {
-      'all': ('css/chosen.css',)
+      'all': ('css/chosen.css',
+              'css/jquery-ui-1.9.2.custom.min.css',
+              'css/admin-facility.css',
+              'css/payments.css',
+             )
     }
     js = ('scripts/jquery-1.8.3.min.js',
-          'scripts/chosen.jquery.min.js')
+          'scripts/chosen.jquery.min.js',
+          'scripts/jquery-ui-1.9.2.custom.min.js',
+          'scripts/jquery.simplemodal-1.4.3.js',
+          )
 
 class FeeAdmin(admin.ModelAdmin):
   list_display = ('type', 'year', 'amount')
