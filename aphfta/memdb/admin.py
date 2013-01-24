@@ -5,7 +5,7 @@ from django.db.models import Sum
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.auth.admin import GroupAdmin
 from django.contrib.auth.models import User, Group
-from helpers.admin_filters import SelectFilter, BooleanSelectFilter, M2MSelectFilter
+from helpers.admin_filters import SelectFilter, FKSelectFilter, BooleanSelectFilter, M2MSelectFilter
 
 class FacilityAdmin(admin.ModelAdmin):
   list_display = ('facility_name', 'doctor_ic', 'full_contact', 'address', 'region', \
@@ -136,7 +136,7 @@ class PaymentAdmin(admin.ModelAdmin):
   search_fields = ('facility',)
 
   list_filter = (
-    M2MSelectFilter('facility', 'facility_name'), #FINISH
+    FKSelectFilter('facility', 'facility_name'),
   )
 
   class Media:

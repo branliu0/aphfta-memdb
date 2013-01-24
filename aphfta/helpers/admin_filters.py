@@ -54,9 +54,11 @@ def SelectFilter(field, search_disabled=False):
             pass
         if value:
           lookups.append((key, value))
+
       return sorted(lookups)
 
   return SelectFilter
+
 
 # Quite similar to the above select filter, except this is for boolean values.
 def BooleanSelectFilter(field):
@@ -80,6 +82,28 @@ def BooleanSelectFilter(field):
       ]
 
   return SelectFilter
+
+# Ability to choose field in FK model
+def FKSelectFilter(field, foreign_display_field):
+    SelectFilterClass = SelectFilter(field)
+    class FKSelectFilter(SelectFilterClass):
+        def lookups(self, request, model_admin):
+          print "sup"
+          lookups = super(FKSelectFilter, self).lookups(request, model_admin)
+          new_lookups = []
+          related_model = self.field.related.parent_model
+          foreign_lookup = related_model.objects.values('id', foreign_display_field)
+          print related_model
+          for lookup, title in lookups:
+            try:
+              id = int(lookup)
+              title = next(f for f in foreign_lookup if f["id"] == int(lookup))[foreign_display_field]
+            except ValueError, StopIteration:
+              # Only let actual field values be valid choices
+              continue
+            new_lookups.append((lookup, title))
+          return sorted(new_lookups, key=itemgetter(1))
+    return FKSelectFilter
 
 def MultiselectFilter(field):
   SelectFilterClass = SelectFilter(field)
@@ -116,9 +140,9 @@ def MultiselectFilter(field):
   return MultiselectFilter
 
 def M2MSelectFilter(field, foreign_display_field, search_disabled=False):
-  SelectFilterClass = SelectFilter(field)
+  FKSelectFilterClass = FKSelectFilter(field, foreign_display_field)
 
-  class M2MSelectFilter(SelectFilterClass):
+  class M2MSelectFilter(FKSelectFilterClass):
     disable_search = search_disabled
 
     def __init__(self, request, params, model, model_admin):
@@ -130,20 +154,5 @@ def M2MSelectFilter(field, foreign_display_field, search_disabled=False):
         raise FieldError("ManyToManyField %s could not be found on the model %s" %
                          (field_name, model.__name__))
       super(M2MSelectFilter, self).__init__(request, params, model, model_admin)
-
-    def lookups(self, request, model_admin):
-      lookups = super(M2MSelectFilter, self).lookups(request, model_admin)
-      new_lookups = []
-      related_model = self.field.related.parent_model
-      foreign_lookup = related_model.objects.values('id', foreign_display_field)
-      for lookup, title in lookups:
-        try:
-          id = int(lookup)
-          title = next(f for f in foreign_lookup if f["id"] == int(lookup))[foreign_display_field]
-        except ValueError, StopIteration:
-          # Only let actual field values be valid choices
-          continue
-        new_lookups.append((lookup, title))
-      return sorted(new_lookups, key=itemgetter(1))
 
   return M2MSelectFilter
