@@ -41,6 +41,9 @@ function addFieldList(el) {
 
   if (name == '') return;
 
+  // Check for duplicates
+  if ($("table#field_list_table input[type='hidden'][name$='field'][value='" + name + "']").length > 0) return;
+
   total_forms = $('#id_displayfield_set-TOTAL_FORMS');
   i = total_forms.val();
   total_forms.val(parseInt(i)+1);
@@ -63,6 +66,9 @@ function addFieldFilter(el) {
   path = $.trim($(el).data('path'));
 
   if (name == '') return;
+
+  // Check for duplicates
+  if ($("table#field_filter_table input[type='hidden'][name$='field'][value='" + name + "']").length > 0) return;
 
   total_forms = $('#id_fil-TOTAL_FORMS');
   i = total_forms.val();
