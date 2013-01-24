@@ -34,9 +34,16 @@ class FacilityAdmin(admin.ModelAdmin):
   save_on_top = True
 
   def edit_balance(self, obj):
+    '''
+      Displays link on balance column for editting facility payments
+    '''
     balance = obj.balance()
+    # green balance button with + symbol if facility pays more than is owed
+    if balance < 0:
+      return '<a class="balance" style="font-weight:bold;color:green" data-id="{0}" href="#">+{1}</a>'\
+          .format(obj.id, "Paid" if balance == 0 else abs(balance))
     return '<a class="balance" data-id="{0}" href="#">{1}</a>'\
-        .format(obj.id, "Paid" if balance == 0 else balance)
+        .format(obj.id, "Paid" if balance == 0 else abs(balance))
   edit_balance.short_description = "Edit Balance"
   edit_balance.allow_tags = True
 
@@ -60,10 +67,17 @@ class FacilityAdmin(admin.ModelAdmin):
 
   class Media:
     css = {
-      'all': ('css/chosen.css',)
+      'all': ('css/chosen.css',
+              'css/jquery-ui-1.9.2.custom.min.css',
+              'css/admin-facility.css',
+              'css/payments.css',
+             )
     }
     js = ('scripts/jquery-1.8.3.min.js',
-          'scripts/chosen.jquery.min.js')
+          'scripts/chosen.jquery.min.js',
+          'scripts/jquery-ui-1.9.2.custom.min.js',
+          'scripts/jquery.simplemodal-1.4.3.js',
+          )
 
 class FeeAdmin(admin.ModelAdmin):
   list_display = ('type', 'year', 'amount')
