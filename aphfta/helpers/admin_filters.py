@@ -41,7 +41,7 @@ def SelectFilter(field, search_disabled=False):
 
     def lookups(self, request, model_admin):
       lookups = []
-      for v in model_admin.model.objects.values_list(self.field_name).distinct():
+      for v in model_admin.model.objects.values_list(self.field_name).order_by().distinct():
         key = value = str(v[0])
 
         # If the field we're dealing with has an enum, then show the value of the enum
@@ -54,6 +54,7 @@ def SelectFilter(field, search_disabled=False):
             pass
         if value:
           lookups.append((key, value))
+      print lookups
       return sorted(lookups)
 
   return SelectFilter
