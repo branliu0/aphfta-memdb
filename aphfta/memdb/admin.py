@@ -9,7 +9,7 @@ from helpers.admin_filters import SelectFilter, BooleanSelectFilter, M2MSelectFi
 
 class FacilityAdmin(admin.ModelAdmin):
   list_display = ('facility_name', 'doctor_ic', 'full_contact', 'address', 'region', \
-                  'district', 'zone', 'programs_list', 'completeness',  'edit_balance')
+                  'district', 'zone', 'programs_list', 'completeness')
 
   search_fields = ('facility_name', 'doctor_ic', 'tel_office', 'moh_reg_cert', 'email')
   list_filter = (
@@ -45,6 +45,18 @@ class FacilityAdmin(admin.ModelAdmin):
   def queryset(self, request):
     qs = super(FacilityAdmin, self).queryset(request)
     return qs.prefetch_related('programs', 'fees', 'payments')
+
+  # Dynamically modify the changelist class so that the balance column is only
+  # shown if the user has permissions to add or edit payments.
+  def get_changelist(self, request):
+    BaseChangeList = super(FacilityAdmin, self).get_changelist(request)
+    class ChangeList(BaseChangeList):
+      def __init__(self, *args, **kwargs):
+        super(ChangeList, self).__init__(*args, **kwargs)
+        if request.user.has_perm('memdb.add_payment') or\
+            request.user.has_perm('memdb.edit_payment'):
+          self.list_display += ('edit_balance',)
+    return ChangeList
 
   class Media:
     css = {
