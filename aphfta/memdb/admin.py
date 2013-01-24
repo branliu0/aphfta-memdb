@@ -13,7 +13,7 @@ class FacilityAdmin(admin.ModelAdmin):
 
   search_fields = ('facility_name', 'doctor_ic', 'tel_office', 'moh_reg_cert', 'email')
   list_filter = (
-      SelectFilter('membership_type'),
+      SelectFilter('facility_type'),
       SelectFilter('region'),
       SelectFilter('district'),
       SelectFilter('zone'),
@@ -61,7 +61,7 @@ class FacilityAdmin(admin.ModelAdmin):
       def __init__(self, *args, **kwargs):
         super(ChangeList, self).__init__(*args, **kwargs)
         if request.user.has_perm('memdb.add_payment') or\
-            request.user.has_perm('memdb.edit_payment'):
+            request.user.has_perm('memdb.change_payment'):
           self.list_display += ('edit_balance',)
     return ChangeList
 
