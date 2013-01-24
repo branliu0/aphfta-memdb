@@ -32791,5 +32791,386 @@
         }, 
         "model": "memdb.facility", 
         "pk": 571
+    },
+  {
+    "pk": 573, 
+    "model": "memdb.facility", 
+    "fields": {
+      "tel_office": "0655711264", 
+      "district": "Kinondoni", 
+      "tel_office2": "0786777790", 
+      "facility_name": "Makongo Hills Clinic", 
+      "programs": [
+        2
+      ], 
+      "email": "makongohillsphamarcy@gmail.com", 
+      "address": "Box 65288", 
+      "region": "Dsm", 
+      "facility_type": "dispensary", 
+      "doctor_ic": "Dr. George", 
+      "date_joined": "2013-01-24"
     }
+  }, 
+  {
+    "pk": 574, 
+    "model": "memdb.facility", 
+    "fields": {
+      "tel_office": "0713667424", 
+      "district": "Kinondoni", 
+      "programs": [
+        2
+      ], 
+      "facility_name": "Sandarya Dispensary", 
+      "doctor_ic": "Dr. Patric", 
+      "address": "Box 32800", 
+      "region": "Dsm", 
+      "facility_type": "dispensary", 
+      "email": "mirumbesandarya@yahoo.com", 
+      "date_joined": "2013-01-24"
+    }
+  }, 
+  {
+    "pk": 575, 
+    "model": "memdb.facility", 
+    "fields": {
+      "tel_office": "0754297872", 
+      "district": "Kinondoni", 
+      "tel_office2": "0715297872", 
+      "facility_name": "Pk Dispensary", 
+      "programs": [
+        2
+      ], 
+      "email": "sganyaka@gmail.com", 
+      "address": "Box 9836", 
+      "region": "Dsm", 
+      "facility_type": "dispensary", 
+      "doctor_ic": "Dr. Sebastian Ganyaka", 
+      "date_joined": "2013-01-24"
+    }
+  }, 
+  {
+    "pk": 576, 
+    "model": "memdb.facility", 
+    "fields": {
+      "tel_office": "0784646011", 
+      "district": "Temeke", 
+      "programs": [
+        2
+      ], 
+      "facility_name": "Taifo Yombo Vituka Dispensary", 
+      "doctor_ic": "Dr. Sulemain T C.muttan", 
+      "address": "Box76592", 
+      "region": "Dsm", 
+      "facility_type": "dispensary", 
+      "email": "cmsuleiman@gmail.com", 
+      "date_joined": "2013-01-24"
+    }
+  }, 
+  {
+    "pk": 577, 
+    "model": "memdb.facility", 
+    "fields": {
+      "tel_office": "0754751918", 
+      "district": "Temeke", 
+      "programs": [
+        2
+      ], 
+      "facility_name": "Taifo Kitunda Dispensary", 
+      "doctor_ic": "Dr. Leonard Myovela", 
+      "address": "Box 7472", 
+      "region": "Dsm", 
+      "facility_type": "dispensary", 
+      "email": "", 
+      "date_joined": "2013-01-24"
+    }
+  }, 
+  {
+    "pk": 578, 
+    "model": "memdb.facility", 
+    "fields": {
+      "tel_office": "0712165787", 
+      "district": "Temeke", 
+      "programs": [
+        2
+      ], 
+      "facility_name": "Memba's Dispensary", 
+      "doctor_ic": "Dr. Jackson Memba", 
+      "address": "", 
+      "region": "Dsm", 
+      "facility_type": "dispensary", 
+      "email": "", 
+      "date_joined": "2013-01-24"
+    }
+  }, 
+  {
+    "pk": 579, 
+    "model": "memdb.facility", 
+    "fields": {
+      "tel_office": "0719108239", 
+      "district": "Ilala", 
+      "programs": [
+        2
+      ], 
+      "facility_name": "P&f Dispensary", 
+      "doctor_ic": "Consolata Peter Sambala", 
+      "address": "", 
+      "region": "Dsm", 
+      "facility_type": "dispensary", 
+      "email": "", 
+      "date_joined": "2013-01-24"
+    }
+  }, 
+  {
+    "pk": 580, 
+    "model": "memdb.facility", 
+    "fields": {
+      "tel_office": "0755823628", 
+      "district": "Temeke", 
+      "programs": [
+        2
+      ], 
+      "facility_name": "Hekima Dispensary", 
+      "doctor_ic": "Dr. Godson Ngwatu", 
+      "address": "", 
+      "region": "Dsm", 
+      "facility_type": "dispensary", 
+      "email": "", 
+      "date_joined": "2013-01-24"
+    }
+  }, 
+  {
+    "pk": 581, 
+    "model": "memdb.facility", 
+    "fields": {
+      "tel_office": "0714733327", 
+      "district": "Kinondoni", 
+      "programs": [
+        2
+      ], 
+      "facility_name": "St Brendan Dispensary", 
+      "doctor_ic": "Dr. Partic A. Manyala", 
+      "address": "", 
+      "region": "Dsm", 
+      "facility_type": "dispensary", 
+      "email": "", 
+      "date_joined": "2013-01-24"
+    }
+  }, 
+  {
+    "pk": 582, 
+    "model": "memdb.facility", 
+    "fields": {
+      "tel_office": "0715388314", 
+      "district": "Kinondoni", 
+      "tel_office2": "0754388314", 
+      "facility_name": "Taifo Tegeta Dispensary", 
+      "programs": [
+        2
+      ], 
+      "email": "", 
+      "address": "", 
+      "region": "Dsm", 
+      "facility_type": "dispensary", 
+      "doctor_ic": "Dr. Robert Nyasebwa", 
+      "date_joined": "2013-01-24"
+    }
+  }, 
+  {
+    "pk": 583, 
+    "model": "memdb.facility", 
+    "fields": {
+      "tel_office": "754764174", 
+      "district": "Temeke", 
+      "programs": [
+        2
+      ], 
+      "facility_name": "Arafa Sama Dispensary", 
+      "doctor_ic": "Dr. Anthony Malulu", 
+      "address": "Box 104861", 
+      "region": "Dsm", 
+      "facility_type": "dispensary", 
+      "email": "", 
+      "date_joined": "2013-01-24"
+    }
+  }, 
+  {
+    "pk": 584, 
+    "model": "memdb.facility", 
+    "fields": {
+      "tel_office": "754766462", 
+      "district": "Nyamagana", 
+      "programs": [
+        2
+      ], 
+      "facility_name": "Gisan Health (t)", 
+      "doctor_ic": "Dr. Godfrey Myaga", 
+      "address": "Box 3091", 
+      "region": "Mwanza", 
+      "facility_type": "dispensary", 
+      "email": "gisanhealth@yahoo.co.uk", 
+      "date_joined": "2013-01-24"
+    }
+  }, 
+  {
+    "pk": 585, 
+    "model": "memdb.facility", 
+    "fields": {
+      "tel_office": "715364418", 
+      "district": "Ilemela", 
+      "programs": [
+        2
+      ], 
+      "facility_name": "Kiloleli Juu Hc", 
+      "doctor_ic": "Dr. Raymond Simon", 
+      "address": "Box 705", 
+      "region": "Mwanza", 
+      "facility_type": "health centre", 
+      "email": "", 
+      "date_joined": "2013-01-24"
+    }
+  }, 
+  {
+    "pk": 586, 
+    "model": "memdb.facility", 
+    "fields": {
+      "tel_office": "754647288", 
+      "district": "Magu", 
+      "programs": [
+        2
+      ], 
+      "facility_name": "Joseph Dispensary", 
+      "doctor_ic": "Dr. Albert Sandi", 
+      "address": "Box 125", 
+      "region": "Mwanza", 
+      "facility_type": "dispensary", 
+      "email": "Ndeparika2@yahoo.com", 
+      "date_joined": "2013-01-24"
+    }
+  }, 
+  {
+    "pk": 587, 
+    "model": "memdb.facility", 
+    "fields": {
+      "tel_office": "754683885", 
+      "district": "Ilemela", 
+      "programs": [
+        2
+      ], 
+      "facility_name": "Nyasaka Dispensary", 
+      "doctor_ic": "Dr. Masoud Masele", 
+      "address": "Box 10559", 
+      "region": "Mwanza", 
+      "facility_type": "dispensary", 
+      "email": "", 
+      "date_joined": "2013-01-24"
+    }
+  }, 
+  {
+    "pk": 588, 
+    "model": "memdb.facility", 
+    "fields": {
+      "tel_office": "784531110", 
+      "district": "Rorya", 
+      "programs": [
+        2
+      ], 
+      "facility_name": "Kothora Dispensary", 
+      "doctor_ic": "Barnabas Othora", 
+      "address": "", 
+      "region": "Mara", 
+      "facility_type": "dispensary", 
+      "email": "", 
+      "date_joined": "2013-01-24"
+    }
+  }, 
+  {
+    "pk": 589, 
+    "model": "memdb.facility", 
+    "fields": {
+      "tel_office": "788984446", 
+      "district": "Tarime", 
+      "programs": [
+        2
+      ], 
+      "facility_name": "Cada Nyangoto", 
+      "doctor_ic": "Dr. Magema", 
+      "address": "", 
+      "region": "Mara", 
+      "facility_type": "dispensary", 
+      "email": "", 
+      "date_joined": "2013-01-24"
+    }
+  }, 
+  {
+    "pk": 590, 
+    "model": "memdb.facility", 
+    "fields": {
+      "tel_office": "784886763", 
+      "district": "Serengeti", 
+      "programs": [
+        2
+      ], 
+      "facility_name": "Kada Mugumu", 
+      "doctor_ic": "Dr. Donald Kisaka", 
+      "address": "Box 53", 
+      "region": "Mara", 
+      "facility_type": "dispensary", 
+      "email": "donaldkisaka@yahoo.com", 
+      "date_joined": "2013-01-24"
+    }
+  }, 
+  {
+    "pk": 591, 
+    "model": "memdb.facility", 
+    "fields": {
+      "tel_office": "767290904", 
+      "district": "Ilemela", 
+      "programs": [
+        2
+      ], 
+      "facility_name": "Huduma Med", 
+      "doctor_ic": "Dr. Felician Ndauzi", 
+      "address": "Box 2421", 
+      "region": "Mwanza", 
+      "facility_type": "dispensary", 
+      "email": "drndauzi@live.com", 
+      "date_joined": "2013-01-24"
+    }
+  }, 
+  {
+    "pk": 592, 
+    "model": "memdb.facility", 
+    "fields": {
+      "tel_office": "78484848343", 
+      "district": "Maswa", 
+      "programs": [
+        2
+      ], 
+      "facility_name": "Wazazi Dispensary", 
+      "doctor_ic": "Dr. Stephen Nyangindu", 
+      "address": "Box 212", 
+      "region": "Simiyu", 
+      "facility_type": "dispensary", 
+      "email": "", 
+      "date_joined": "2013-01-24"
+    }
+  }, 
+  {
+    "pk": 593, 
+    "model": "memdb.facility", 
+    "fields": {
+      "tel_office": "787610495", 
+      "district": "Tarime", 
+      "programs": [
+        2
+      ], 
+      "facility_name": "Tarime Goodwill", 
+      "doctor_ic": "Hudson Winan", 
+      "address": "Box 126", 
+      "region": "Mara", 
+      "facility_type": "health centre", 
+      "email": "goodwillf@hotmail.com", 
+      "date_joined": "2013-01-24"
+    }
+  }
 ]
