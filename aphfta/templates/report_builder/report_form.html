@@ -65,6 +65,7 @@
               <tbody>
                 {% for form in field_list_formset %}
                   <tr>
+                    <td style="display: none;">{{ form.id }}{{ form.width }}</td>
                     <td><span style="cursor: move;" class="ui-icon ui-icon-arrowthick-2-n-s"></span></td>
                     <td>{{ form.field }}{{ form.field_verbose }}{{ form.path }}</td>
                     <td>{{ form.name }}</td>
@@ -97,6 +98,7 @@
               <tbody>
                 {% for form in field_filter_formset %}
                   <tr>
+                    <td style="display: none;">{{ form.id }}</td>
                     <td><span style="cursor: move;" class="ui-icon ui-icon-arrowthick-2-n-s"></span></td>
                     <td>{{ form.field }}{{ form.field_verbose }}{{ form.path }}</td>
                     <td>{{ form.filter_type }}</td>

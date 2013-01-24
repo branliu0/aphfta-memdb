@@ -42,7 +42,7 @@ function addFieldList(el) {
   if (name == '') return;
 
   // Check for duplicates
-  if ($("table#field_list_table input[type='hidden'][name$='field'][value='" + name + "']").length > 0) return;
+  if ($("table#field_list_table tr:not(.deleted-row) input[type='hidden'][name$='field'][value='" + name + "']").length > 0) return;
 
   total_forms = $('#id_displayfield_set-TOTAL_FORMS');
   i = total_forms.val();
@@ -53,6 +53,7 @@ function addFieldList(el) {
   row_html += '<td><input id="id_displayfield_set-'+i+'-field" name="displayfield_set-'+i+'-field" type="hidden" value="' + name + '"/>'
   row_html += '<input id="id_displayfield_set-'+i+'-name" name="displayfield_set-'+i+'-name" type="text" value="' + name + '"/></td>';
   row_html += '<input type="checkbox" name="displayfield_set-'+i+'-sort_reverse" id="id_displayfield_set-'+i+'-sort_reverse"></td>';
+  row_html += '<td style="display: none;"><input style="display: none;" type="text" name="displayfield_set-'+i+'-width" id="id_displayfield_set-'+i+'-width" value="15" /></td>';
   row_html += '<td><input style="display: none;" type="checkbox" name="displayfield_set-'+i+'-DELETE" id="id_displayfield_set-'+i+'-DELETE">';
   row_html += '<span class="hide_me"><input type="text" name="displayfield_set-'+i+'-position" value="999" id="id_displayfield_set-'+i+'-position"></span>' +
     '<a href="#" class="delete-row">Delete</a></td>';
@@ -69,7 +70,7 @@ function addFieldFilter(el) {
   if (name == '') return;
 
   // Check for duplicates
-  if ($("table#field_filter_table input[type='hidden'][name$='field'][value='" + name + "']").length > 0) return;
+  if ($("table#field_filter_table tr:not(.deleted-row) input[type='hidden'][name$='field'][value='" + name + "']").length > 0) return;
 
   total_forms = $('#id_fil-TOTAL_FORMS');
   i = total_forms.val();
@@ -225,6 +226,7 @@ $(function() {
 
     $("table").on('click', '.delete-row', function(e) {
       e.preventDefault();
-      $(e.target).closest("tr").remove();
+      $(e.target).closest("tr").hide().addClass("deleted-row"); // Hide the actual row
+      $(e.target).closest("td").find("input[type='checkbox']").attr('checked', 'checked');
     });
 });

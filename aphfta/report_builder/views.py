@@ -30,6 +30,13 @@ class ReportEditForm(forms.ModelForm):
 
 
 class DisplayFieldForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        initial = kwargs.get('initial', {})
+        initial['width'] = 15
+        kwargs['initial'] = initial
+        super(DisplayFieldForm, self).__init__(*args, **kwargs)
+
     class Meta:
         model = DisplayField
         widgets = {
