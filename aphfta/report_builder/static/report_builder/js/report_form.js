@@ -41,6 +41,9 @@ function addFieldList(el) {
 
   if (name == '') return;
 
+  // Check for duplicates
+  if ($("table#field_list_table tr:not(.deleted-row) input[type='hidden'][name$='field'][value='" + name + "']").length > 0) return;
+
   total_forms = $('#id_displayfield_set-TOTAL_FORMS');
   i = total_forms.val();
   total_forms.val(parseInt(i)+1);
@@ -50,10 +53,54 @@ function addFieldList(el) {
   row_html += '<td><input id="id_displayfield_set-'+i+'-field" name="displayfield_set-'+i+'-field" type="hidden" value="' + name + '"/>'
   row_html += '<input id="id_displayfield_set-'+i+'-name" name="displayfield_set-'+i+'-name" type="text" value="' + name + '"/></td>';
   row_html += '<input type="checkbox" name="displayfield_set-'+i+'-sort_reverse" id="id_displayfield_set-'+i+'-sort_reverse"></td>';
-  row_html += '<td><input type="checkbox" name="displayfield_set-'+i+'-DELETE" id="id_displayfield_set-'+i+'-DELETE">';
-  row_html += '<span class="hide_me"><input type="text" name="displayfield_set-'+i+'-position" value="999" id="id_displayfield_set-'+i+'-position"></span></td>';
+  row_html += '<td style="display: none;"><input style="display: none;" type="text" name="displayfield_set-'+i+'-width" id="id_displayfield_set-'+i+'-width" value="15" /></td>';
+  row_html += '<td><input style="display: none;" type="checkbox" name="displayfield_set-'+i+'-DELETE" id="id_displayfield_set-'+i+'-DELETE">';
+  row_html += '<span class="hide_me"><input type="text" name="displayfield_set-'+i+'-position" value="999" id="id_displayfield_set-'+i+'-position"></span>' +
+    '<a href="#" class="delete-row">Delete</a></td>';
   row_html += '</tr>';
   $('#field_list_table > tbody:last').append(row_html);
+}
+
+function addFieldFilter(el) {
+  field = $.trim($(el).text());
+  name = $.trim($(el).data('name'));
+  path_verbose = $.trim($(el).data('path_verbose'));
+  path = $.trim($(el).data('path'));
+
+  if (name == '') return;
+
+  // Check for duplicates
+  if ($("table#field_filter_table tr:not(.deleted-row) input[type='hidden'][name$='field'][value='" + name + "']").length > 0) return;
+
+  total_forms = $('#id_fil-TOTAL_FORMS');
+  i = total_forms.val();
+  total_forms.val(parseInt(i)+1);
+
+  row_html = '<tr>'
+  row_html += '<td><span style="cursor: move;" class="ui-icon ui-icon-arrowthick-2-n-s"></span></td>'
+  row_html += '<td><input type="hidden" name="fil-'+i+'-field" value="'+ name +'" id="id_fil-'+i+'-field">'
+  row_html += '<input name="fil-'+i+'-field_verbose" value="'+ field +'" readonly="readonly" maxlength="2000" type="text" id="id_fil-'+i+'-field_verbose">'
+  row_html += '<input type="hidden" value="'+ path +'" name="fil-'+i+'-path" id="id_fil-'+i+'-path"></td>'
+  row_html += '<td><select onchange="check_filter_type(event.target)" name="fil-'+i+'-filter_type" id="id_fil-'+i+'-filter_type">'
+  row_html += '<option value="">---------</option>\
+  <option value="iexact">Equals</option>\
+  <option value="icontains" selected="selected">Contains</option>\
+  <option value="gt">Greater than</option>\
+  <option value="lt">Less than</option>\
+  <option value="range">range</option>\
+  </select></td>'
+  if ( field.indexOf("DateField") > 0 ) {
+    row_html += '<td><input class="datepicker" id="id_fil-'+i+'-filter_value" type="text" name="fil-'+i+'-filter_value" value="" maxlength="2000"></td>'
+  } else {
+    row_html += '<td><input id="id_fil-'+i+'-filter_value" type="text" name="fil-'+i+'-filter_value" value="" maxlength="2000"></td>'
+  }
+  row_html += '<td><input type="checkbox" name="fil-'+i+'-exclude" id="id_fil-'+i+'-exclude"></td>'
+  row_html += '<td><input style="display: none;" type="checkbox" name="fil-'+i+'-DELETE" id="id_fil-'+i+'-DELETE">'
+  row_html += '<span class="hide_me"><input type="text" name="fil-'+i+'-position" value="0" id="id_fil-'+i+'-position"></span>' +
+    '<a href="#" class="delete-row">Delete</a></td>'
+  row_html += '</tr>'
+  $('#field_filter_table > tbody:last').append(row_html);
+  $( ".datepicker" ).datepicker();
 }
 
 function enable_drag() {
@@ -70,41 +117,7 @@ function enable_drag() {
     });
     $( "#field_filter_droppable" ).droppable({
         drop: function( event, ui ) {
-            field = $.trim($(ui.draggable).text());
-            name = $.trim($(ui.draggable).children().data('name'));
-            path_verbose = $.trim($(ui.draggable).children().data('path_verbose'));
-            path = $.trim($(ui.draggable).children().data('path'));
-
-            if (name == '') return;
-
-            total_forms = $('#id_fil-TOTAL_FORMS');
-            i = total_forms.val();
-            total_forms.val(parseInt(i)+1);
-
-            row_html = '<tr>'
-            row_html += '<td><span style="cursor: move;" class="ui-icon ui-icon-arrowthick-2-n-s"></span></td>'
-            row_html += '<td><input type="hidden" name="fil-'+i+'-field" value="'+ name +'" id="id_fil-'+i+'-field">'
-            row_html += '<input name="fil-'+i+'-field_verbose" value="'+ field +'" readonly="readonly" maxlength="2000" type="text" id="id_fil-'+i+'-field_verbose">'
-            row_html += '<input type="hidden" value="'+ path +'" name="fil-'+i+'-path" id="id_fil-'+i+'-path"></td>'
-            row_html += '<td><select onchange="check_filter_type(event.target)" name="fil-'+i+'-filter_type" id="id_fil-'+i+'-filter_type">'
-            row_html += '<option value="">---------</option>\
-<option value="iexact">Equals</option>\
-<option value="icontains" selected="selected">Contains</option>\
-<option value="gt">Greater than</option>\
-<option value="lt">Less than</option>\
-<option value="range">range</option>\
-</select></td>'
-            if ( field.indexOf("DateField") > 0 ) {
-            	row_html += '<td><input class="datepicker" id="id_fil-'+i+'-filter_value" type="text" name="fil-'+i+'-filter_value" value="" maxlength="2000"></td>'
-            } else {
-                row_html += '<td><input id="id_fil-'+i+'-filter_value" type="text" name="fil-'+i+'-filter_value" value="" maxlength="2000"></td>'
-            }
-            row_html += '<td><input type="checkbox" name="fil-'+i+'-exclude" id="id_fil-'+i+'-exclude"></td>'
-            row_html += '<td><input type="checkbox" name="fil-'+i+'-DELETE" id="id_fil-'+i+'-DELETE">'
-            row_html += '<span class="hide_me"><input type="text" name="fil-'+i+'-position" value="0" id="id_fil-'+i+'-position"></span></td>'
-            row_html += '</tr>'
-            $('#field_filter_table > tbody:last').append(row_html);
-            $( ".datepicker" ).datepicker();
+          addFieldFilter(ui.draggable.find(".field-button"));
         }
     });
 }
@@ -202,6 +215,18 @@ $(function() {
     window.onbeforeunload = "Are you sure you want to leave?";
 
     $(".field-button").dblclick(function(e) {
-      addFieldList(e.target);
-    })
+      var activeTab = $("#tabs li.ui-state-active")
+      var tabIndex = $("#tabs li").index(activeTab);
+      if (tabIndex == 0) {
+        addFieldList(e.target);
+      } else if (tabIndex == 1) {
+        addFieldFilter(e.target);
+      }
+    });
+
+    $("table").on('click', '.delete-row', function(e) {
+      e.preventDefault();
+      $(e.target).closest("tr").hide().addClass("deleted-row"); // Hide the actual row
+      $(e.target).closest("td").find("input[type='checkbox']").attr('checked', 'checked');
+    });
 });

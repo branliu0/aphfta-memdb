@@ -41,7 +41,7 @@ def SelectFilter(field, search_disabled=False):
 
     def lookups(self, request, model_admin):
       lookups = []
-      for v in model_admin.model.objects.values_list(self.field_name).distinct():
+      for v in model_admin.model.objects.values_list(self.field_name).order_by().distinct():
         key = value = str(v[0])
 
         # If the field we're dealing with has an enum, then show the value of the enum
@@ -54,7 +54,6 @@ def SelectFilter(field, search_disabled=False):
             pass
         if value:
           lookups.append((key, value))
-
       return sorted(lookups)
 
   return SelectFilter
@@ -88,12 +87,11 @@ def FKSelectFilter(field, foreign_display_field):
     SelectFilterClass = SelectFilter(field)
     class FKSelectFilter(SelectFilterClass):
         def lookups(self, request, model_admin):
-          print "sup"
           lookups = super(FKSelectFilter, self).lookups(request, model_admin)
           new_lookups = []
           related_model = self.field.related.parent_model
           foreign_lookup = related_model.objects.values('id', foreign_display_field)
-          print related_model
+
           for lookup, title in lookups:
             try:
               id = int(lookup)
@@ -103,6 +101,7 @@ def FKSelectFilter(field, foreign_display_field):
               continue
             new_lookups.append((lookup, title))
           return sorted(new_lookups, key=itemgetter(1))
+
     return FKSelectFilter
 
 def MultiselectFilter(field):

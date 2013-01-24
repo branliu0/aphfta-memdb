@@ -6,7 +6,6 @@ from django.core.urlresolvers import reverse
 from memdb.models import Facility
 from memdb.models import Payment
 from memdb.models import Fee
-from memdb.forms import FacilityForm
 from django.db.models import Sum
 import datetime
 import json
@@ -18,44 +17,6 @@ def index(request):
 
 def home(request):
   return render(request, 'memdb/home.html')
-
-def register(request):
-  context = {}
-
-  if request.method == "GET":
-    facility_name_pos = 0
-    outpatient_pos = 10
-    lab_pos = 18
-    physicians_pos = 27
-    average_pos = 48
-    submitText = "Register"
-
-    form = list(FacilityForm())
-    context.update(locals())
-    return render(request, 'memdb/clinicForm.html', context)
-
-  elif request.method == 'POST':
-    form = FacilityForm(request.POST)
-    if form.is_valid():
-        facility = form.save(commit = False)
-        facility.date_joined = timezone.now()
-        facility.save()
-        return HttpResponseRedirect('/')
-
-def update(request, id=None):
-  facility = get_object_or_404(Facility, id=id)
-
-  if request.method == "POST":
-    form = FacilityForm(request.POST, instance=facility)
-    if form.is_valid():
-      form.save()
-      return HttpResponseRedirect('/')
-
-  elif request.method == "GET":
-    form = FacilityForm(instance=facility)
-
-  context = Context({'title': "Update User", 'submitText': "Update", 'form': form})
-  return render(request, 'memdb/clinicForm.html', context)
 
 def payment(request, id=None):
     interval = int(request.GET.get("interval", 1))
