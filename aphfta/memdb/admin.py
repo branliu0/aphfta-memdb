@@ -135,6 +135,21 @@ class PaymentAdmin(admin.ModelAdmin):
   list_display = ('facility', 'date', 'amount')
   search_fields = ('facility',)
 
+  list_filter = (
+    M2MSelectFilter('facility', 'facility_name'), #FINISH
+  )
+
+  class Media:
+    css = {
+      'all': ('css/chosen.css',)
+    }
+
+    js = ('scripts/jquery-1.8.3.min.js',
+          'scripts/chosen.jquery.min.js',
+         )
+
+
+
 class ProgramAdminForm(forms.ModelForm):
   facilities = forms.ModelMultipleChoiceField(
       queryset=Facility.objects.all(),
