@@ -155,6 +155,7 @@ class Facility(models.Model):
 class Payment(models.Model):
   facility = models.ForeignKey(Facility, related_name='payments')
   date = models.DateField()
+  # year = models.IntegerField()
   amount = models.IntegerField()
 
   def __unicode__(self):

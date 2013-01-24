@@ -81,9 +81,22 @@ class FacilityAdmin(admin.ModelAdmin):
 
 class FeeAdmin(admin.ModelAdmin):
   list_display = ('type', 'year', 'amount')
-  search_fields = ('type', 'year', 'amount')
+  search_fields = ('type', 'year', 'amount', 'facility__facility_name')
+
+  list_filter = (
+    M2MSelectFilter('facility', 'facility_name'),
+  )
 
   filter_horizontal = ('facility',)
+
+  class Media:
+    css = {
+      'all': ('css/chosen.css',)
+    }
+
+    js = ('scripts/jquery-1.8.3.min.js',
+          'scripts/chosen.jquery.min.js',
+         )
 
   # when saving a fee from admin interface update Facility static fee dict
 
