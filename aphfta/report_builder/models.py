@@ -68,8 +68,8 @@ class FilterField(models.Model):
     filter_type = models.CharField(
         max_length=20,
         choices = (
-            ('iexact','Equals (case-insensitive)'),
-            ('icontains','Contains (case-insensitive)'),
+            ('iexact','Equals'),
+            ('icontains','Contains'),
             ('gt','Greater than'),
             ('lt','Less than'),
             ('range','range'),
