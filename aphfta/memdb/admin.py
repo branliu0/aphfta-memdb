@@ -119,7 +119,7 @@ class FeeAdmin(admin.ModelAdmin):
 
   @staticmethod
   def getRegions():
-    return map(lambda x: x['region'], Facility.objects.values('region').distinct())
+    return map(lambda x: x['region'], Facility.objects.values('region').order_by().distinct())
 
 class PaymentAdmin(admin.ModelAdmin):
   list_display = ('facility', 'date', 'amount')
