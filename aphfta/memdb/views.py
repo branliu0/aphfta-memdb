@@ -106,15 +106,15 @@ def add_payment(request, facility_id=None):
     new_payment.save();
     return HttpResponse("success")
 
-def region(request, region=''):
+def membership(request, membership=''):
     '''
       When creating a new fee, the user may want to apply the fee to all
       facilities in a region. This function returns just that.
     '''
 
     # return set of all facilities in region, and compliment of set
-    include_facilities = Facility.objects.filter(region=region)
-    exclude_facilities = Facility.objects.exclude(region=region)
+    include_facilities = Facility.objects.filter(facility_type=membership)
+    exclude_facilities = Facility.objects.exclude(facility_type=membership)
 
     include_facility_names = map(lambda x: { 'id': x.id, 'name': x.facility_name }, include_facilities)
     exclude_facility_names = map(lambda x: { 'id': x.id, 'name': x.facility_name }, exclude_facilities)
