@@ -175,9 +175,9 @@ class FeeAdmin(admin.ModelAdmin):
     return map(lambda x: x['region'], Facility.objects.values('region').order_by().distinct())
 
 class PaymentAdmin(admin.ModelAdmin):
-  list_display = ('facility', 'date', 'amount')
+  list_display = ('facility', 'year', 'date', 'amount')
   search_fields = ('facility',)
-  ordering = ('-date',)
+  ordering = ('-year',)
 
   list_filter = (
     FKSelectFilter('facility', 'facility_name'),
