@@ -7,12 +7,12 @@
         {% if forloop.counter == 4 %}
 
           <div class="form-row field-region">
-              <label for="region-select">Region:</label>
-              <select id="region-select" name="region">
+              <label for="membership-select">Facility Type:</label>
+              <select id="membership-select" name="region">
                 <option value="none" selected="selected">None</option>
-                {% for region in adminform.model_admin.getRegions %}
+                {% for membership_type in adminform.model_admin.getMembershipTypes %}
                   {% if region != "" %}
-                    <option value="{{region}}">{{region}}</option>
+                    <option value="{{membership_type}}">{{membership_type}}</option>
                   {% endif %}
                 {% endfor %}
               </select>
@@ -44,11 +44,11 @@
     {% endfor %}
 </fieldset>
 <script>
-  $('#region-select').change(function() {
-      region = $('#region-select').val();
+  $('#membership-select').change(function() {
+      membership = $('#membership-select').val();
 
       $.ajax({
-        url: "/members/regions/"+region,
+        url: "/members/membership/" + membership,
         type: 'get',
         success: function(results) {
           input_str = '';

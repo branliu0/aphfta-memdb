@@ -171,13 +171,14 @@ class FeeAdmin(admin.ModelAdmin):
     return "Fee"
 
   @staticmethod
-  def getRegions():
-    return map(lambda x: x['region'], Facility.objects.values('region').order_by().distinct())
+  def getMembershipTypes():
+    types = map(lambda x: x['facility_type'].title(), Facility.objects.values('facility_type').distinct().order_by('facility_type'))
+    return filter(None, types)
 
 class PaymentAdmin(admin.ModelAdmin):
-  list_display = ('facility', 'date', 'amount')
+  list_display = ('facility', 'year', 'date', 'amount')
   search_fields = ('facility',)
-  ordering = ('-date',)
+  ordering = ('-year',)
 
   list_filter = (
     FKSelectFilter('facility', 'facility_name'),
