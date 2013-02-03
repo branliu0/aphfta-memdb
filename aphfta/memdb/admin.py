@@ -118,7 +118,6 @@ class FacilityAdmin(admin.ModelAdmin):
           'scripts/chosen.jquery.min.js',
           'scripts/jquery-ui-1.9.2.custom.min.js',
           'scripts/jquery.simplemodal-1.4.3.js',
-          'scripts/payments.js',
           )
 
 class FeeAdmin(admin.ModelAdmin):
